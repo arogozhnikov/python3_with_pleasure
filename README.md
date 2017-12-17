@@ -1,9 +1,13 @@
-# Мысли о том, почему стоит мигрировать на питон3
+# Guide on migrating to python3 for data scientists
+
+This guide should help you to move to python 3 and enjoy it! 
+Most probably, you already know about the problems caused by inconsistencies between python2 and python3, here I cover some of the changes that may come in handy for data scientists.
 
 - Питон 2 популярен среди ДС
 - Однако питон 3 уже тоже весьма популярен, вот например Джейк https://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/ писал про это и он теперь уверен, что стоит двигаться в сторону питон 3
 - Если вы только начинаете, то точно стоит сразу учить питон3
 - Здесь гайд по переходу на третий питон, и какие плюшки это принесет
+- Мне не нравится учить людей питону3, потому что требуется сразу объяснять iterables, которые не слишком нужны, но путают
 
 
 ## Type hinting is now part of the language
@@ -13,7 +17,7 @@ def compute_time(data):
   data['time'] = data['distance'] / data['velocity'] 
 ```
 
-which may work with dicy, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
+which may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 
 Things are also quite complicated when operating with tensors, which may come of many different frameworks.
 
@@ -34,7 +38,9 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 -
 
-## Print Is A Function
+## Print Is A Function Now
+
+Of course, you have already learnet this, but apart from adding annoying parenthesis, there are some advantages:
 
 -
 
@@ -104,14 +110,22 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 TODO надо ссылочку на хорошие примеры.
 
-## Default pickle engine provides much better compression
+## Default pickle engine provides better compression for arrays
 
 
 ## Single integer type
 
-```
-isinstance()
+Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` (for long arithmetics).
 
+Python3 now has only `int`, which provides long arithmetics.
+
+Checking for integer is easier in python 3:
+
+```
+isinstance(x, numbers.Integral) # python2
+isinstance(x, [long, int]) # python2
+isinstance(x, int) # python3, easiest to remember
+```
 
 ## Other 
 
