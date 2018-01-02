@@ -57,23 +57,52 @@ It's always tempting to use string concatenation (which is obviously bad, but mo
 in python3 code is both safe and verbose.
 
 Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
+
 ```python
 p.exists()
 p.is_dir()
 p.parts()
-p.withsuffix('.jpg') # only change the extension!
+p.withsuffix('sibling.png') # only change the name, but keep the folder
+p.withsuffix('.jpg') # only change the extension, but keep the folder and the name
 p.chmod(mode)
 ```
+`Pathlib` should save you lots of time.
 
 
 ## Globbing with `**`
 
+Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) was written to overcome this. Since python3.6 recurive flag is supported:
+
+```python
+import glob
+# python2
+
+found_images = \
+    glob.glob('/path/*/*.jpg') \
+  + glob.glob('/path/*/*/*.jpg') \
+  + glob.glob('/path/*/*/*/*.jpg') \
+  + glob.glob('/path/*/*/*/*/*.jpg') \
+  + glob.glob('/path/*/*/*/*/*/*.jpg') 
+
+# python3
+
+found_images = glob.glob('/path/**/*.jpg', recursive=True)
+```
+
+Also, you can use `pathlib` in python3 (minus one import, hurrah!):
+```python
+found_images = pathlib.Path('/path').glob('**/*.jpg')
+```
 
 ## Print Is A Function Now
 
-Of course, you have already learnet this, but apart from adding annoying parenthesis, there are some advantages:
+Probably, you have already learnt this, but apart from adding annoying parenthesis, there are some advantages:
 
--
+You don't need to remember the special syntax for using file descriptor:
+```python
+print >>sys.stderr, "fatal error" # python2
+print("fatal error", file=sys.stderr) # python3
+```
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -160,6 +189,8 @@ isinstance(x, int) # python3, easiest to remember
 ```
 
 # 
+
+
 
 ## Other 
 
