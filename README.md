@@ -10,6 +10,40 @@ Most probably, you already know about the problems caused by inconsistencies bet
 - Мне не нравится учить людей питону3, потому что требуется сразу объяснять iterables, которые не слишком нужны, но путают
 
 
+
+## Better paths handling
+
+`pathlib` is a default module in python3. 
+Use it to avoid tons of `os.path.join`s:
+
+```python
+from pathlib import Path
+dataset_root = Path('/path/to/dataset/')
+train_path = dataset_root / 'train'
+test_path = dataset_root / 'test'
+for image_path in train_path.iterdir():
+    with image_path.open() as f: # note, open is a method of 
+        # do something with an image
+```
+
+It's always tempting to use string concatenation (which is obviously bad, but more verbose), 
+in python3 code is both safe and verbose.
+
+Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
+
+```python
+p.exists()
+p.is_dir()
+p.parts() 
+p.withsuffix('sibling.png') # only change the name, but keep the folder
+p.withsuffix('.jpg') # only change the extension, but keep the folder and the name
+p.chmod(mode)
+p.rmdir()
+```
+`Pathlib` should save you lots of time, 
+please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
+
+
 ## Type hinting is now part of the language
 
 ```
@@ -36,37 +70,19 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 ## Matrix multiplication as @
 
--
+Let's implement one of the simplest ML models - a linear regression with l2 regulatization:
 
-## Better paths handling
+```
+# L2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
 
-`pathlib` is a default module in python3. 
-Use it to avoid tons of `os.path.join`s:
-
-```python
-from pathlib import Path
-dataset_root = Path('/path/to/dataset/')
-train_path = dataset_root / 'train'
-test_path = dataset_root / 'test'
-for image_path in train_path.iterdir():
-    with image_path.open() as f: # note, open is a method of 
-        # do something with an image
+# python2
+X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
+# python3
+X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
-It's always tempting to use string concatenation (which is obviously bad, but more verbose), 
-in python3 code is both safe and verbose.
+The code with `@` becomes more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
 
-Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
-
-```python
-p.exists()
-p.is_dir()
-p.parts()
-p.withsuffix('sibling.png') # only change the name, but keep the folder
-p.withsuffix('.jpg') # only change the extension, but keep the folder and the name
-p.chmod(mode)
-```
-`Pathlib` should save you lots of time.
 
 
 ## Globbing with `**`
@@ -89,20 +105,23 @@ found_images = \
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
-Also, you can use `pathlib` in python3 (minus one import, hurrah!):
+Another option is to use `pathlib` in python3 (minus one import!):
 ```python
 found_images = pathlib.Path('/path').glob('**/*.jpg')
 ```
 
 ## Print Is A Function Now
 
-Probably, you have already learnt this, but apart from adding annoying parenthesis, there are some advantages:
+Probably, you've already learnt this, but apart from adding annoying parenthesis, there are some advantages:
 
 You don't need to remember the special syntax for using file descriptor:
 ```python
 print >>sys.stderr, "fatal error" # python2
 print("fatal error", file=sys.stderr) # python3
 ```
+
+Also, parentheses are not as annoying after a couple of months :)
+
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -115,13 +134,19 @@ data = pandas.read_csv('timing.csv')
 velocity = data['distance'] / data['time']
 ```
 
-Result in python2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored integer.
+Result in python2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
 In python3, result is correct in both cases, promotion. 
 
-Another case is integer division, which is now an eplicit operation:
+Another case is integer division, which is now an explicit operation:
 
 ```python
 n_gifts = money // gift_price
+```
+## Constants in math
+
+```
+math.inf # 'largest' number
+math.nan # not a number
 ```
 
 ## Strict ordering 
@@ -142,28 +167,28 @@ Sidenote: proper check for None is
 if a is not None:
   pass
   
-if a: # very bad idea!
+if a: # very bad idea
   pass
 ```
 
 ## Iterable unpacking
 
 ```python
-# handy when amound of additional stored info may vary between experiments, but the same code can be used in all cases
+# handy when amount of additional stored info may vary between experiments, but the same code can be used in all cases
 model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 # picking two last values from a sequence
 *prev, next_to_last, last = values_history
 
-# This also works with any iterables, so if you have a function that yields, say, qualities
-# simple way to take only last two values from a list
+# This also works with any iterables, so if you have a function that yields e.g. qualities,
+# below is a simple way to take only last two values from a list 
 *prev, next_to_last, last = iter_train(args)
 ```
 
 ## OrderedDict is faster now
 
 OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added.
--
+
 
 ## Unicode 
 
@@ -188,7 +213,7 @@ isinstance(x, [long, int]) # python2
 isinstance(x, int) # python3, easiest to remember
 ```
 
-# 
+## 
 
 
 
@@ -217,10 +242,30 @@ isinstance(x, int) # python3, easiest to remember
   In general, comprehensions are also much better 'translatable' between python2 and python 3.
 
 - map, values, items do not return lists.
-  Problem with enumerators are:
+  Problem with iterators are:
   - no trivial slicing
   - no double usage
   
-  Quite typically, all of this situations are resolved by converting to list.
+  Quite typically, you can resolve it by converting to list.
 
+# Main problem for education
+
+You should spend some time in the beginning to explain what is an iterator, 
+why is can't be sliced like a string and how to deal with it. 
+Data science courses will struggle with it.
+
+
+# Conclusion
+
+Python3 is here for almost 10 years, but right now it it time that you *should* move to python3.
+
+There are issues with migration, but the advantages worth it.
+Your research and production code should benefit significantly from moving to python3-only.
+
+And I can't wait the bright moment when libraries can drop support for python2 (which should happen quite soon) and completely enjoy new features that were not backported.
+
+Python team: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+
+Links 
+- http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html (и смотри внутри)
 
