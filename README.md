@@ -38,6 +38,37 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 -
 
+## Better paths handling
+
+`pathlib` is a default module in python3. 
+Use it to avoid tons of `os.path.join`s:
+
+```python
+from pathlib import Path
+dataset_root = Path('/path/to/dataset/')
+train_path = dataset_root / 'train'
+test_path = dataset_root / 'test'
+for image_path in train_path.iterdir():
+    with image_path.open() as f: # note, open is a method of 
+        # do something with an image
+```
+
+It's always tempting to use string concatenation (which is obviously bad, but more verbose), 
+in python3 code is both safe and verbose.
+
+Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
+```python
+p.exists()
+p.is_dir()
+p.parts()
+p.withsuffix('.jpg') # only change the extension!
+p.chmod(mode)
+```
+
+
+## Globbing with `**`
+
+
 ## Print Is A Function Now
 
 Of course, you have already learnet this, but apart from adding annoying parenthesis, there are some advantages:
@@ -102,6 +133,7 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 ## OrderedDict is faster now
 
+OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added.
 -
 
 ## Unicode 
@@ -126,6 +158,8 @@ isinstance(x, numbers.Integral) # python2
 isinstance(x, [long, int]) # python2
 isinstance(x, int) # python3, easiest to remember
 ```
+
+# 
 
 ## Other 
 
