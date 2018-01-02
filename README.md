@@ -68,9 +68,10 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
+
 ## Matrix multiplication as @
 
-Let's implement one of the simplest ML models - a linear regression with l2 regulatization:
+Let's implement one of the simplest ML models - a linear regression with l2 regularization:
 
 ```
 # L2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
@@ -82,7 +83,6 @@ X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
 The code with `@` becomes more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
-
 
 
 ## Globbing with `**`
@@ -120,8 +120,17 @@ print >>sys.stderr, "fatal error" # python2
 print("fatal error", file=sys.stderr) # python3
 ```
 
-Also, parentheses are not as annoying after a couple of months :)
+Finally, parentheses are not as annoying after a couple of months :)
 
+It also worth mentioning, that printing of tab-aligned tables can be done without `str.join`:
+```python
+print(batch, epoch, loss, accuracy, time, sep='\t')
+```
+## String literals
+
+```
+f"{batch} {epoch} {loss} {accuracy} {time}"
+```
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -187,21 +196,41 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 ## OrderedDict is faster now
 
-OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added.
+OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added. 
 
 
 ## Unicode 
 
-Значительно проще работать с текстами, если вы занимаетесь NLP. 
+```python
+print(len('您好'))
+```
+Python2 outputs 6, python3 outputs 2. 
 
-TODO надо ссылочку на хорошие примеры.
+In python3 `str`s are unicode strings, so it is more convenient for NLP processing of non-english texts.
+
 
 ## Default pickle engine provides better compression for arrays
+
+```
+import cPickle as pickle
+import numpy
+print len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
+# prints 23691675
+
+python 3
+import pickle
+import numpy
+len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
+# prints 8000162
+```
+
+You can actually achieve close compression with `protocol=2` parameter, but developers typically ignore this option (or simply not aware of it).
 
 
 ## Single integer type
 
 Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` (for long arithmetics).
+Quite confusing after C++.
 
 Python3 now has only `int`, which provides long arithmetics.
 
@@ -213,11 +242,8 @@ isinstance(x, [long, int]) # python2
 isinstance(x, int) # python3, easiest to remember
 ```
 
-## 
 
-
-
-## Other 
+## Other stuff
 
 - yield from 
 - async / await
