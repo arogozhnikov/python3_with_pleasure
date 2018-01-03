@@ -13,8 +13,7 @@ Most probably, you already know about the problems caused by inconsistencies bet
 
 ## Better paths handling
 
-`pathlib` is a default module in python3. 
-Use it to avoid tons of `os.path.join`s:
+`pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
 
 ```python
 from pathlib import Path
@@ -48,7 +47,7 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 
 ```
 def compute_time(data):
-  data['time'] = data['distance'] / data['velocity'] 
+    data['time'] = data['distance'] / data['velocity'] 
 ```
 
 which may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
@@ -57,7 +56,7 @@ Things are also quite complicated when operating with tensors, which may come of
 
 ```
 def convert_to_grayscale(images):
-  return image.mean()
+    return image.mean()
 ```
 
 Еще нужно return doctypes продемонстрировать, IDE контролирует, когда возвращается что-то не то.
@@ -124,13 +123,31 @@ Finally, parentheses are not as annoying after a couple of months :)
 
 It also worth mentioning, that printing of tab-aligned tables can be done without `str.join`:
 ```python
+print(*array, sep='\t')
 print(batch, epoch, loss, accuracy, time, sep='\t')
 ```
-## String literals
+## Formatted string literals for logging
 
+Quite typically data scientist outputs iteratively some logging information as in a fixed format. 
+
+```python
+print("{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}".format(
+    batch=batch, epoch=epoch, total_epochs=total_epochs, 
+    acc_mean=numpy.mean(accuracies), acc_std=numpy.std(accuracies),
+    avg_time=time / len(data_batch)
+))
+
+
+print(f"{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}")
 ```
-f"{batch} {epoch} {loss} {accuracy} {time}"
+
+Sample output:
 ```
+120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
+```
+
+Default logging system provides the flexibility (template and formatted values are independent) that one doesn't need in research code. This comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
+
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -151,11 +168,16 @@ Another case is integer division, which is now an explicit operation:
 ```python
 n_gifts = money // gift_price
 ```
-## Constants in math
+## Constants in math module
 
-```
+```python
 math.inf # 'largest' number
 math.nan # not a number
+
+max_quality = -math.inf
+
+for model in trained_models:
+    max_quality = max(max_quality, compute_quality(model, data))
 ```
 
 ## Strict ordering 
@@ -194,11 +216,6 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 *prev, next_to_last, last = iter_train(args)
 ```
 
-## OrderedDict is faster now
-
-OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added. 
-
-
 ## Unicode 
 
 ```python
@@ -206,7 +223,25 @@ print(len('您好'))
 ```
 Python2 outputs 6, python3 outputs 2. 
 
-In python3 `str`s are unicode strings, so it is more convenient for NLP processing of non-english texts.
+```
+x = u'со'
+x += 'со'
+```
+python2 fails, python3 works as expected (because I've used russian letters in this example).
+
+In python3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
+
+There are less obvious things, for instance:
+```python
+print(sorted([u'a', 'a']))
+print(sorted(['a', u'a']))
+```
+
+Python2 output:
+```
+[u'a', 'a']
+['a', u'a']
+```
 
 
 ## Default pickle engine provides better compression for arrays
@@ -224,7 +259,12 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 # prints 8000162
 ```
 
-You can actually achieve close compression with `protocol=2` parameter, but developers typically ignore this option (or simply not aware of it).
+You can actually achieve close compression with `protocol=2` parameter, but developers typically ignore this option (or simply not aware of it). 
+
+
+## OrderedDict is faster now
+
+OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added. 
 
 
 ## Single integer type
@@ -276,10 +316,10 @@ isinstance(x, int) # python3, easiest to remember
 
 # Main problem for education
 
-You should spend some time in the beginning to explain what is an iterator, 
-why is can't be sliced like a string and how to deal with it. 
-Data science courses will struggle with it.
+Data science courses will struggle with some of the changes.
 
+Course authors should spend time in the beginning to explain what is an iterator, 
+why is can't be sliced / concatenated like a string (and how to deal with it). 
 
 # Conclusion
 
@@ -290,7 +330,7 @@ Your research and production code should benefit significantly from moving to py
 
 And I can't wait the bright moment when libraries can drop support for python2 (which should happen quite soon) and completely enjoy new features that were not backported.
 
-Python team: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
 Links 
 - http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html (и смотри внутри)
