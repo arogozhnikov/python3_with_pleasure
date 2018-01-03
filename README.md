@@ -1,7 +1,8 @@
-# Guide on migrating to python3 for data scientists
+# Moving to python 3 with pleasure
+## A short guide on migrating from python2 to python3 for data scientists
 
-This guide should help you to move to python 3 and enjoy it! 
-Most probably, you already know about the problems caused by inconsistencies between python2 and python3, here I cover some of the changes that may come in handy for data scientists.
+Most probably, you already know about the problems caused by inconsistencies between python2 and python3, 
+here I cover some of the changes that may come in handy for data scientists.
 
 - Питон 2 популярен среди ДС
 - Однако питон 3 уже тоже весьма популярен, вот например Джейк https://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/ писал про это и он теперь уверен, что стоит двигаться в сторону питон 3
@@ -26,7 +27,7 @@ for image_path in train_path.iterdir():
 ```
 
 It's always tempting to use string concatenation (which is obviously bad, but more verbose), 
-in python3 code is both safe and verbose.
+in python3 code is safe, concise, and readable.
 
 Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
 
@@ -39,6 +40,7 @@ p.with_suffix('.jpg') # only change the extension, but keep the folder and the n
 p.chmod(mode)
 p.rmdir()
 ```
+
 `Pathlib` should save you lots of time, 
 please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
 
