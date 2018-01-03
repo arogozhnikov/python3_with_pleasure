@@ -34,8 +34,8 @@ Also `pathlib.Path` has a bunch of methods, that every python novice has to goog
 p.exists()
 p.is_dir()
 p.parts() 
-p.withsuffix('sibling.png') # only change the name, but keep the folder
-p.withsuffix('.jpg') # only change the extension, but keep the folder and the name
+p.with_name('sibling.png') # only change the name, but keep the folder
+p.with_suffix('.jpg') # only change the extension, but keep the folder and the name
 p.chmod(mode)
 p.rmdir()
 ```
@@ -68,6 +68,10 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
 
+## Type hinting for conversion
+
+TODO complete this one
+
 ## Matrix multiplication as @
 
 Let's implement one of the simplest ML models - a linear regression with l2 regularization:
@@ -81,7 +85,7 @@ X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
 X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
-The code with `@` becomes more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
+The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
 
 
 ## Globbing with `**`
@@ -131,14 +135,14 @@ print(batch, epoch, loss, accuracy, time, sep='\t')
 Quite typically data scientist outputs iteratively some logging information as in a fixed format. 
 
 ```python
-print("{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}".format(
+print('{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}'.format(
     batch=batch, epoch=epoch, total_epochs=total_epochs, 
     acc_mean=numpy.mean(accuracies), acc_std=numpy.std(accuracies),
     avg_time=time / len(data_batch)
 ))
 
 
-print(f"{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}")
+print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
 Sample output:
@@ -146,7 +150,8 @@ Sample output:
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
-Default logging system provides the flexibility (template and formatted values are independent) that one doesn't need in research code. This comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
+Default logging system provides the flexibility (template and formatted values are independent) that is not required in research code. 
+This comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
 
 
 ## Explicit difference between 'true division' and 'integer division'
@@ -168,6 +173,7 @@ Another case is integer division, which is now an explicit operation:
 ```python
 n_gifts = money // gift_price
 ```
+
 ## Constants in math module
 
 ```python
@@ -277,7 +283,7 @@ Python3 now has only `int`, which provides long arithmetics.
 Checking for integer is easier in python 3:
 
 ```
-isinstance(x, numbers.Integral) # python2
+isinstance(x, numbers.Integral) # python2, the canonical way
 isinstance(x, [long, int]) # python2
 isinstance(x, int) # python3, easiest to remember
 ```
@@ -319,19 +325,20 @@ isinstance(x, int) # python3, easiest to remember
 Data science courses will struggle with some of the changes.
 
 Course authors should spend time in the beginning to explain what is an iterator, 
-why is can't be sliced / concatenated like a string (and how to deal with it). 
+why is can't be sliced / concatenated like a string (and how to deal with it).
 
 # Conclusion
 
-Python3 is here for almost 10 years, but right now it it time that you *should* move to python3.
+Python3 is with us for almost 10 years, but right now it it time that you *should* move to python3.
 
 There are issues with migration, but the advantages worth it.
-Your research and production code should benefit significantly from moving to python3-only.
+Your research and production code should benefit significantly from moving to python3-only codebase.
 
-And I can't wait the bright moment when libraries can drop support for python2 (which should happen quite soon) and completely enjoy new features that were not backported.
+And I can't wait the bright moment when libraries can drop support for python2 (which will happen quite soon) and completely enjoy new language features that were not backported.
 
 Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
-Links 
+### Links
+
 - http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html (и смотри внутри)
 
