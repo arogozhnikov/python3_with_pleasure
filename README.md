@@ -114,9 +114,9 @@ Let's implement one of the simplest ML models &mdash; a linear regression with l
 ```
 # L2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
 
-# python2
+# Python 2
 X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
-# python3
+# Python 3
 X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
@@ -150,12 +150,12 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 
 ## Print is a function now
 
-Probably, you've already learnt this, but apart from adding parenthesis, there are some advantages:
+Yes, code now has these annoying parentheses, but there are some advantages:
 
 - simple syntax for using file descriptor:
     ```python
-    print >>sys.stderr, "fatal error"      # python2
-    print("fatal error", file=sys.stderr)  # python3
+    print >>sys.stderr, "critical error"      # python2
+    print("critical error", file=sys.stderr)  # python3
     ```
 - printing tab-aligned tables without `str.join`:
     ```python
@@ -227,7 +227,7 @@ Another case is integer division, which is now an explicit operation:
 n_gifts = money // gift_price
 ```
 
-Note, that this works for built-in types as well as for custom provided by data packages (e.g. `numpy` or `pandas`).
+Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
 
 
 ## Constants in math module
@@ -245,18 +245,21 @@ for model in trained_models:
 ## Strict ordering 
 
 ```python
+# will throw an exception in Python 3
 3 < '3'
 2 < None
 (3, 4) < (3, None)
 (4, 5) < [4, 5]
+
+# False in both Python2 and Python 3
 (4, 5) == [4, 5]
 ```
 
-- Prevents from occasional sorting of instances of different types
+- prevents from occasional sorting of instances of different types
   ```python
-  sorted([2, '1', 3])  # invalid for python3, in python2 returns [2, 3, '1']
+  sorted([2, '1', 3])  # invalid for Python 3, in python2 returns [2, 3, '1']
   ```
-- Generally, helps to spot some problems that arise when processing raw data
+- helps to spot some problems that arise when processing raw data
 
 Sidenote: proper check for None is
 ```python
@@ -267,19 +270,6 @@ if a: # WRONG check for None
   pass
 ```
 
-## Iterable unpacking
-
-```python
-# handy when amount of additional stored info may vary between experiments, but the same code can be used in all cases
-model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
-
-# picking two last values from a sequence
-*prev, next_to_last, last = values_history
-
-# This also works with any iterables, so if you have a function that yields e.g. qualities,
-# below is a simple way to take only last two values from a list 
-*prev, next_to_last, last = iter_train(args)
-```
 
 ## Unicode for NLP
 
@@ -312,6 +302,19 @@ Python 2 outputs:
 ['a', u'a']
 ```
 
+## Iterable unpacking
+
+```python
+# handy when amount of additional stored info may vary between experiments, but the same code can be used in all cases
+model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
+
+# picking two last values from a sequence
+*prev, next_to_last, last = values_history
+
+# This also works with any iterables, so if you have a function that yields e.g. qualities,
+# below is a simple way to take only last two values from a list 
+*prev, next_to_last, last = iter_train(args)
+```
 
 ## Default pickle engine provides better compression for arrays
 
@@ -333,10 +336,13 @@ Three times less space.
 Actually close compression is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
 
 
+<!--
 ## OrderedDict is faster now 
 
-OrderedDict is probably the most used structure after list. 
+OrderedDict is probably the most used structure after list in my experiments. 
 It a good old dictionary, which keeps the order in which keys were added. 
+https://docs.python.org/3.1/whatsnew/3.1.html
+-->
 
 ## Safer comprehensions
 
@@ -417,4 +423,4 @@ Following migrations will be smoother: ["we will never do this kind of backwards
 ### Links
 
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
-- [How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
+- [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
