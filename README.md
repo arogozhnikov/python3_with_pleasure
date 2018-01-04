@@ -1,8 +1,8 @@
 # Migrating to Python 3 with pleasure
 ## A short guide on features of Python 3 for data scientists
 
-Python became a mainstream language for machine learning and other scientific fields that heavily operate with data.
-Python boasts various frameworks for deep learning and well-established set of tools for data processing and visualization.
+Python became a mainstream language for machine learning and other scientific fields that heavily operate with data;
+it boasts various deep learning frameworks and well-established set of tools for data processing and visualization.
 
 However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists. 
 By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
@@ -365,9 +365,9 @@ predictions = [model.predict(data) for data, labels in dataset]
 
 Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
 
-Python 3 has a single type `int`, which provides long arithmetics as well.
+Python 3 has a single type `int`, which incorporates long arithmetics.
 
-Checking for integer:
+Here is how you check that value is integer:
 
 ```
 isinstance(x, numbers.Integral) # Python 2, the canonical way
@@ -383,7 +383,7 @@ isinstance(x, int)              # Python 3, easier to remember
 - `Enum`s are theoreticlly useful, but 
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay well with numpy and other libraries
-- coroutines also *sound* promising, but those are not qenuinely parallel, 
+- coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild 
 - some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) only support Python 3, 
   so features that sound useless for you are useful for libraries you'll probably want to use once.
 
