@@ -60,7 +60,8 @@ data pipelines these days include numerous steps each involving different framew
 Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
 
 For instance, the following code may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
-```
+
+```python
 def compute_time(data):
     data['time'] = data['distance'] / data['velocity'] 
 ```
@@ -68,14 +69,14 @@ def compute_time(data):
 
 Things are also quite complicated when operating with tensors, which may come from different frameworks.
 
-```
+```python
 def convert_to_grayscale(images):
     return images.mean(axis=1)
 ```
 
 Еще нужно return doctypes продемонстрировать, IDE контролирует, когда возвращается что-то не то.
 
-```
+```python
 def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, float]:
   ...
   return loss, accuracy
@@ -96,7 +97,7 @@ By default, type hinting does not influence how your code is working, but merely
 However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
 this may be helpful during debugging.
 
-```
+```python
 @enforce.runtime_validation
 def foo(text: str) -> None:
     print(text)
@@ -115,8 +116,8 @@ def foo(a: typing.Callable[[int, int], str]) -> str:
 
 Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization:
 
-```
-# L2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
+```python
+# l2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
 
 # Python 2
 X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
@@ -328,7 +329,7 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 ## Default pickle engine provides better compression for arrays
 
-```
+```python
 # Python 2
 import cPickle as pickle
 import numpy
@@ -382,8 +383,8 @@ isinstance(x, int)              # Python 3, easier to remember
 
 - `Enum`s
 - yield from 
-- keyword-only arguments  `def f(a, b, *args, option=True):` allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
-- async / await
+- keyword-only arguments  `def f(a, b, *, option=True):` allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter + cloud) only supports Python 3.4
 
 
 ## Main problems for code in data science and how to resolve those
