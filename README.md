@@ -26,15 +26,15 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-It's always tempting to use string concatenation (which is obviously bad, but more concise), 
+Previously it was always tempting to use string concatenation (which is obviously bad, but more concise), 
 with `pathlib` code is safe, concise, and readable.
 
-Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
+Also `pathlib.Path` has a bunch of methods, that every python novice had to google (and anyone who is not working with files all the time):
 
 ```python
 p.exists()
 p.is_dir()
-p.parts() 
+p.parts()
 p.with_name('sibling.png') # only change the name, but keep the folder
 p.with_suffix('.jpg') # only change the extension, but keep the folder and the name
 p.chmod(mode)
@@ -48,15 +48,16 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 ## Type hinting is now part of the language
 
 Python is not just a language for small scripts anymore, 
-data pipelines include numerous steps each involving different frameworks.
-Type hinting was introduced to help with growing complexity of programs, so machines could verify .
+data pipelines these days include numerous steps each involving different frameworks an sometimes very different logic.
 
+Type hinting was introduced to help with growing complexity of programs, so machines could verify.
+
+For instance, the following code may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 ```
 def compute_time(data):
     data['time'] = data['distance'] / data['velocity'] 
 ```
 
-which may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 
 Things are also quite complicated when operating with tensors, which may come from different frameworks.
 
@@ -75,12 +76,14 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
-You may want to watch a webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon to get a brief introduction (even if you opposed to the whole idea of typing in python).
+You may want to watch a webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon to get a brief introduction.
 
-If you're running 
+If you have a significant codebase, tools like [MyPy](http://mypy.readthedocs.io) will likely to become part of your continuous integration pipeline. 
 
-Unfortunately, right now it is not yet powerful enough to provide fine-grained typing for ndarrays, but
-[maybe we'll have it once](https://github.com/numpy/numpy/issues/7370).
+
+
+Unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but
+[maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be an amazing features.
 
 ## Type hinting for conversion
 
@@ -133,8 +136,8 @@ Probably, you've already learnt this, but apart from adding annoying parenthesis
 
 There is no need to remember the special syntax for using file descriptor:
 ```python
-print >>sys.stderr, "fatal error" # python2
-print("fatal error", file=sys.stderr) # python3
+print >>sys.stderr, "fatal error"      # python2
+print("fatal error", file=sys.stderr)  # python3
 ```
 
 Finally, parentheses are not as annoying after a couple of months :)
@@ -144,7 +147,10 @@ It also worth mentioning, that one can print tab-aligned tables without `str.joi
 print(*array, sep='\t')
 print(batch, epoch, loss, accuracy, time, sep='\t')
 ```
-## f-strings for logging
+## f-strings for simple and reliable formatting
+
+Default formatting system provides a flexibility that is not required in data experiments. 
+Resulting code is either too verbose or too fragile towards any changes.
 
 Quite typically data scientist outputs iteratively some logging information as in a fixed format. 
 It is common to have a code like:
@@ -157,8 +163,11 @@ print('{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_s
     avg_time=time / len(data_batch)
 ))
 
-# python3
-print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
+# python2 (too error-prone during fast modifications, please avoid):
+print('{:3} {:3} / {:3}  accuracy: {:0.4f}±{:0.4f} time: {:3.2f}'.format(
+    batch, epoch, total_epochs, numpy.mean(accuracies), numpy.std(accuracies),
+    time / len(data_batch)
+))
 ```
 
 Sample output:
@@ -166,10 +175,13 @@ Sample output:
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
-Default formatting system provides the flexibility (template and formatted values are independent) that is not required in research code. 
-This flexibity comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
+**f-strings** aka formatted string literals were introduced in python 3.6:
+```python
+print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
+```
 
-TODO стоит проговорить про 
+
+
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -183,13 +195,16 @@ velocity = data['distance'] / data['time']
 ```
 
 Result in python2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
-In python3, result is correct in both cases, promotion to float happens autotically when needed. 
+In python3, result is correct in both cases, promotion to float happens automatically when needed. 
 
 Another case is integer division, which is now an explicit operation:
 
 ```python
 n_gifts = money // gift_price
 ```
+
+Note, that this works for built-in pytes as well as for provided by data packages (e.g. `numpy` or `pandas`).
+
 
 ## Constants in math module
 
@@ -242,7 +257,7 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 *prev, next_to_last, last = iter_train(args)
 ```
 
-## Unicode 
+## Unicode for NLP
 
 ```python
 print(len('您好'))
@@ -279,21 +294,23 @@ Python2 outputs:
 import cPickle as pickle
 import numpy
 print len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
-# prints 23691675
+# result: 23691675
 
 python 3
 import pickle
 import numpy
 len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
-# prints 8000162
+# result: 8000162
 ```
 
-You can actually achieve close compression with `protocol=2` parameter, but developers typically ignore this option (or simply not aware of it). 
+Three times less space.
+Actually close compression is achievable with `protocol=2` parameter, but developers usually ignore this option (or simply not aware of it). 
 
 
-## OrderedDict is faster 
+## OrderedDict is faster now 
 
-OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added. 
+OrderedDict is probably the most used structure after list. 
+It a good old dictionary, which keeps the order in which keys were added. 
 
 
 ## Single integer type
@@ -301,14 +318,14 @@ OrderedDict is probably the most used structure after list. It a good old dictio
 Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` (for long arithmetics).
 Quite confusing after C++.
 
-Python3 now has only `int`, which provides long arithmetics.
+Python3 now has only `int`, which also provides long arithmetics.
 
-Checking for integer is easier in python 3:
+Checking for integer:
 
 ```
 isinstance(x, numbers.Integral) # python2, the canonical way
-isinstance(x, [long, int]) # python2
-isinstance(x, int) # python3, easiest to remember
+isinstance(x, [long, int])      # python2
+isinstance(x, int)              # python3, easiest to remember
 ```
 
 
