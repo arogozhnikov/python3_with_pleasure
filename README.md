@@ -1,15 +1,15 @@
-# Moving to python 3 with pleasure
-## A short guide on migrating from python2 to python3 for data scientists
+# Migrating to Python 3 with pleasure
+## A short guide on features of Python 3 for data scientists
 
-Most probably, you already know about the problems caused by inconsistencies between python2 and python3, 
-here I cover some of the changes that may come in handy for data scientists.
+Python became a mainstream language for machine learning and other scientific fields that heavily operate with data.
+Python boasts various frameworks for deep learning and well-established set of tools for data processing and visualization.
 
-- Питон 2 популярен среди ДС
-- Однако питон 3 уже тоже весьма популярен, вот например Джейк https://jakevdp.github.io/blog/2013/01/03/will-scientists-ever-move-to-python-3/ писал про это и он теперь уверен, что стоит двигаться в сторону питон 3
-- Если вы только начинаете, то точно стоит сразу учить питон3
-- Здесь гайд по переходу на третий питон, и какие плюшки это принесет
-- Мне не нравится учить людей питону3, потому что требуется сразу объяснять iterables, которые не слишком нужны, но путают
+However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists. 
+By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
+As for numpy, after 2018 any new feature releases will support [only Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
+To make transition more joyful, I've collected a bunch of Python 3 features that you may find useful 
+(and worth migrating faster). 
 
 
 ## Better paths handling with `pathlib`
@@ -41,7 +41,7 @@ p.chmod(mode)
 p.rmdir()
 ```
 
-`Pathlib` should save you lots of time, 
+`pathlib` should save you lots of time, 
 please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
 
 
@@ -79,7 +79,7 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
-If you have a significant codebase, tools like [MyPy](http://mypy.readthedocs.io) will likely to become part of your continuous integration pipeline. 
+If you have a significant codebase, hint tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
 
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
@@ -89,7 +89,8 @@ Sidenote: unfortunately, right now hinting is not yet powerful enough to provide
 
 By default, type hinting does not influence how your code is working, but merely helps you to point code intentions.
 
-However, you can enforce type checking in runtime with tools like [enforce](https://github.com/RussBaz/enforce).
+However, you can enforce type checking in runtime with tools like [enforce](https://github.com/RussBaz/enforce), 
+this may be helpful during debugging.
 
 ```
 @enforce.runtime_validation
@@ -103,13 +104,12 @@ foo(5)    # fails
 @enforce.runtime_validation
 def foo(a: typing.Callable[[int, int], str]) -> str:
     return a(5, 6)
-    
 ```
 
 
 ## Matrix multiplication as @
 
-Let's implement one of the simplest ML models - a linear regression with l2 regularization:
+Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization:
 
 ```
 # L2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
@@ -125,7 +125,7 @@ The code with `@` becomes more readable and more translatable between deep learn
 
 ## Globbing with `**`
 
-Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) was written to overcome this. Recurive flag is supported since python3.6:
+Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) exists that overcomes this. Recursive flag is supported since Python 3.6:
 
 ```python
 import glob
@@ -201,7 +201,7 @@ Sample output:
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
-**f-strings** aka formatted string literals were introduced in python 3.6:
+**f-strings** aka formatted string literals were introduced in Python 3.6:
 ```python
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
@@ -209,7 +209,7 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 
 ## Explicit difference between 'true division' and 'integer division'
 
-This may be not a good fit for system programming in python, but for data science this is definitely a positive change
+For data science this is definitely a handy change (but not for system programming, I believe)
 
 ```python
 velocity = distance / time
@@ -218,8 +218,8 @@ data = pandas.read_csv('timing.csv')
 velocity = data['distance'] / data['time']
 ```
 
-Result in python2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
-In python3, result is correct in both cases, promotion to float happens automatically when needed. 
+Result in Python 2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
+In Python 3, result is correct in both cases, promotion to float happens automatically when needed. 
 
 Another case is integer division, which is now an explicit operation:
 
@@ -287,25 +287,26 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 print(len('您好'))
 ```
 Output:
-- python2: `6`
-- python3: `2`. 
+- Python 2: `6`
+- Python 3: `2`. 
 
 ```
 x = u'со'
-x += 'со'
+x += 'co' # ok
+x += 'со' # fail
 ```
-python2 fails, python3 works as expected (because I've used russian letters in strings).
+Python 2 fails, Python 3 works as expected (because I've used russian letters in strings).
 
-In python3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
+In Python 3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
 
-There are less obvious things, for instance:
+There are less obvious funny things, for instance:
 
 ```python
 print(sorted([u'a', 'a']))
 print(sorted(['a', u'a']))
 ```
 
-Python2 outputs:
+Python 2 outputs:
 ```
 [u'a', 'a']
 ['a', u'a']
@@ -315,12 +316,13 @@ Python2 outputs:
 ## Default pickle engine provides better compression for arrays
 
 ```
+# Python 2
 import cPickle as pickle
 import numpy
 print len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 # result: 23691675
 
-python 3
+# Python 3
 import pickle
 import numpy
 len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
@@ -328,7 +330,7 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 ```
 
 Three times less space.
-Actually close compression is achievable with `protocol=2` parameter, but developers usually ignore this option (or simply not aware of it). 
+Actually close compression is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
 
 
 ## OrderedDict is faster now 
@@ -336,20 +338,28 @@ Actually close compression is achievable with `protocol=2` parameter, but develo
 OrderedDict is probably the most used structure after list. 
 It a good old dictionary, which keeps the order in which keys were added. 
 
+## Safer comprehensions
+
+```python
+labels = <initial_value>
+predictions = [model.predict(data) for data, labels in dataset]
+
+# labels are overwritten in python2
+# labels are not affected by comprehension in python3
+```
 
 ## Single integer type
 
-Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` (for long arithmetics).
-Quite confusing after C++.
+Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
 
-Python3 now has only `int`, which also provides long arithmetics.
+Python3 has a single type `int`, which provides long arithmetics as well.
 
 Checking for integer:
 
 ```
 isinstance(x, numbers.Integral) # python2, the canonical way
 isinstance(x, [long, int])      # python2
-isinstance(x, int)              # python3, easiest to remember
+isinstance(x, int)              # python3, easier to remember
 ```
 
 ## Other stuff
@@ -361,7 +371,7 @@ isinstance(x, int)              # python3, easiest to remember
 
 ## Main problems for code in data science and how to resolve those
 
-- relative imports from subfloders
+- relative imports from subdirectories
   - packaging 
   - sys.path.insert
   - softlinks
@@ -382,7 +392,8 @@ isinstance(x, int)              # python3, easiest to remember
   - no trivial slicing
   - can't be used twice
   
-  Almost all of the problems resolve it by converting to list.
+  Almost all of the problems are resolved by converting result to list.
+
 
 ## Main problems for teaching machine learning and data science with python 
 
@@ -392,19 +403,18 @@ Course authors should spend time in the beginning to explain what is an iterator
 why is can't be sliced / concatenated like a string (and how to deal with it).
 
 
-
 # Conclusion
 
-Python2 and Python3 co-exist for almost 10 years, but right now it it time that you *should* move to python3.
+Python 2 and Python 3 co-exist for almost 10 years, but right now it is time that we *should* move to Python 3.
 
 There are issues with migration, but the advantages worth it.
-Your research and production code should benefit significantly from moving to python3-only codebase.
+Your research and production code should benefit significantly from moving to Python 3-only codebase.
 
-And I can't wait the bright moment when libraries can drop support for python2 (which will happen quite soon) and completely enjoy new language features.
+And I can't wait the bright moment when libraries can drop support for Python2 (which will happen quite soon) and completely enjoy new language features.
 
 Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
 ### Links
 
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
-
+- [How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
