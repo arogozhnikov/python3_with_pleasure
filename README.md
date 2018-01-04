@@ -272,7 +272,7 @@ for model in trained_models:
   ```
 - helps to spot some problems that arise when processing raw data
 
-Sidenote: proper check for None is
+Sidenote: proper check for None is (in both Python versions)
 ```python
 if a is not None:
   pass
