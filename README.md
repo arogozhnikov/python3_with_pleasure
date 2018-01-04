@@ -47,10 +47,13 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 
 ## Type hinting is now part of the language
 
-Python is not just a language for small scripts anymore, 
-data pipelines these days include numerous steps each involving different frameworks an sometimes very different logic.
+<img src='pycharm-type-hinting.png' />
+<span style='font-size: 0.5em;'>type hinting in pycharm</span>
 
-Type hinting was introduced to help with growing complexity of programs, so machines could verify.
+Python is not just a language for small scripts anymore, 
+data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
+
+Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
 
 For instance, the following code may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 ```
@@ -76,18 +79,33 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, fl
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
-You may want to watch a webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon to get a brief introduction.
-
 If you have a significant codebase, tools like [MyPy](http://mypy.readthedocs.io) will likely to become part of your continuous integration pipeline. 
 
+A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
+Sidenote: unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
 
-Unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but
-[maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be an amazing features.
+## Type hinting -> type checking in runtime
 
-## Type hinting for conversion
+By default, type hinting does not influence how your code is working, but merely helps you to point code intentions.
 
-TODO complete this one
+However, you can enforce type checking in runtime with tools like [enforce](https://github.com/RussBaz/enforce).
+
+```
+@enforce.runtime_validation
+def foo(text: str) -> None:
+    print(text)
+
+foo('Hi') # ok
+foo(5)    # fails   
+
+# enforce also supports callable arguments
+@enforce.runtime_validation
+def foo(a: typing.Callable[[int, int], str]) -> str:
+    return a(5, 6)
+    
+```
+
 
 ## Matrix multiplication as @
 
@@ -114,11 +132,11 @@ import glob
 # python2
 
 found_images = \
-    glob.glob('/path/*/*.jpg') \
+    glob.glob('/path/*.jpg') \
+  + glob.glob('/path/*/*.jpg') \
   + glob.glob('/path/*/*/*.jpg') \
   + glob.glob('/path/*/*/*/*.jpg') \
-  + glob.glob('/path/*/*/*/*/*.jpg') \
-  + glob.glob('/path/*/*/*/*/*/*.jpg') 
+  + glob.glob('/path/*/*/*/*/*.jpg') 
 
 # python3
 
@@ -130,23 +148,31 @@ Better option is to use `pathlib` in python3 (minus one import!):
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
 
-## Print Is A Function Now
+## Print is a function now
 
-Probably, you've already learnt this, but apart from adding annoying parenthesis, there are some advantages:
+Probably, you've already learnt this, but apart from adding parenthesis, there are some advantages:
 
-There is no need to remember the special syntax for using file descriptor:
-```python
-print >>sys.stderr, "fatal error"      # python2
-print("fatal error", file=sys.stderr)  # python3
-```
+- simple syntax for using file descriptor:
+    ```python
+    print >>sys.stderr, "fatal error"      # python2
+    print("fatal error", file=sys.stderr)  # python3
+    ```
+- printing tab-aligned tables without `str.join`:
+    ```python
+    print(*array, sep='\t')
+    print(batch, epoch, loss, accuracy, time, sep='\t')
+    ```
+- hacky suppressing / redirection of printing output:
+    ```python
+    _print = print # store the original print function
+    def print(*args, **kargs):
+        pass  # or do something useful, e.g. store output to some file
+    ```
+- `print` can participate in list comprehensions and other language constructs 
+    ```python
+    result = process(x) if is_valid(x) else print('invalid item: ', x)
+    ```
 
-Finally, parentheses are not as annoying after a couple of months :)
-
-It also worth mentioning, that one can print tab-aligned tables without `str.join`:
-```python
-print(*array, sep='\t')
-print(batch, epoch, loss, accuracy, time, sep='\t')
-```
 ## f-strings for simple and reliable formatting
 
 Default formatting system provides a flexibility that is not required in data experiments. 
@@ -181,11 +207,9 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 ```
 
 
-
-
 ## Explicit difference between 'true division' and 'integer division'
 
-While this change may be not a good fit for system programming in python, for data science this is definitely a positive change
+This may be not a good fit for system programming in python, but for data science this is definitely a positive change
 
 ```python
 velocity = distance / time
@@ -203,7 +227,7 @@ Another case is integer division, which is now an explicit operation:
 n_gifts = money // gift_price
 ```
 
-Note, that this works for built-in pytes as well as for provided by data packages (e.g. `numpy` or `pandas`).
+Note, that this works for built-in types as well as for custom provided by data packages (e.g. `numpy` or `pandas`).
 
 
 ## Constants in math module
@@ -232,14 +256,14 @@ for model in trained_models:
   ```python
   sorted([2, '1', 3])  # invalid for python3, in python2 returns [2, 3, '1']
   ```
-- Generally, resolves some problems that arise when processing raw data
+- Generally, helps to spot some problems that arise when processing raw data
 
 Sidenote: proper check for None is
 ```python
 if a is not None:
   pass
   
-if a: # very bad idea
+if a: # WRONG check for None
   pass
 ```
 
@@ -328,7 +352,6 @@ isinstance(x, [long, int])      # python2
 isinstance(x, int)              # python3, easiest to remember
 ```
 
-
 ## Other stuff
 
 - `Enum`s
@@ -343,7 +366,7 @@ isinstance(x, int)              # python3, easiest to remember
   - sys.path.insert
   - softlinks
   
-- support for nested arguments was dropped
+- support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
   ```
   map(lambda x, (y, z): x, z, dict.items())
   ```
@@ -354,12 +377,12 @@ isinstance(x, int)              # python3, easiest to remember
   ```
   In general, comprehensions are also much better 'translatable' between python2 and python 3.
 
-- map, values, items do not return lists.
+- `map`, `.values()`, `.items()` do not return lists.
   Problem with iterators are:
   - no trivial slicing
-  - no double usage
+  - can't be used twice
   
-  Quite typically, you can resolve it by converting to list.
+  Almost all of the problems resolve it by converting to list.
 
 ## Main problems for teaching machine learning and data science with python 
 
