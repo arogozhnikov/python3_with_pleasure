@@ -12,13 +12,13 @@ here I cover some of the changes that may come in handy for data scientists.
 
 
 
-## Better paths handling
+## Better paths handling with `pathlib`
 
 `pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
 
 ```python
 from pathlib import Path
-dataset_root = Path('/path/to/dataset/')
+dataset_root = Path('/path/to/dataset/') 
 train_path = dataset_root / 'train'
 test_path = dataset_root / 'test'
 for image_path in train_path.iterdir():
@@ -26,8 +26,8 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-It's always tempting to use string concatenation (which is obviously bad, but more verbose), 
-in python3 code is safe, concise, and readable.
+It's always tempting to use string concatenation (which is obviously bad, but more concise), 
+with `pathlib` code is safe, concise, and readable.
 
 Also `pathlib.Path` has a bunch of methods, that every python novice has to google (and anyone who is not working with files all the time):
 
@@ -47,6 +47,10 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 
 ## Type hinting is now part of the language
 
+Python is not just a language for small scripts anymore, 
+data pipelines include numerous steps each involving different frameworks.
+Type hinting was introduced to help with growing complexity of programs, so machines could verify .
+
 ```
 def compute_time(data):
     data['time'] = data['distance'] / data['velocity'] 
@@ -54,21 +58,29 @@ def compute_time(data):
 
 which may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 
-Things are also quite complicated when operating with tensors, which may come of many different frameworks.
+Things are also quite complicated when operating with tensors, which may come from different frameworks.
 
 ```
 def convert_to_grayscale(images):
-    return image.mean()
+    return images.mean(axis=1)
 ```
 
 Еще нужно return doctypes продемонстрировать, IDE контролирует, когда возвращается что-то не то.
 
+```
 def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, float]:
   ...
   return loss, accuracy
+```
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 
+You may want to watch a webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon to get a brief introduction (even if you opposed to the whole idea of typing in python).
+
+If you're running 
+
+Unfortunately, right now it is not yet powerful enough to provide fine-grained typing for ndarrays, but
+[maybe we'll have it once](https://github.com/numpy/numpy/issues/7370).
 
 ## Type hinting for conversion
 
@@ -92,7 +104,7 @@ The code with `@` becomes more readable and more translatable between deep learn
 
 ## Globbing with `**`
 
-Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) was written to overcome this. Since python3.6 recurive flag is supported:
+Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) was written to overcome this. Recurive flag is supported since python3.6:
 
 ```python
 import glob
@@ -110,16 +122,16 @@ found_images = \
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
-Another option is to use `pathlib` in python3 (minus one import!):
+Better option is to use `pathlib` in python3 (minus one import!):
 ```python
-found_images = pathlib.Path('/path').glob('**/*.jpg')
+found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
 
 ## Print Is A Function Now
 
 Probably, you've already learnt this, but apart from adding annoying parenthesis, there are some advantages:
 
-You don't need to remember the special syntax for using file descriptor:
+There is no need to remember the special syntax for using file descriptor:
 ```python
 print >>sys.stderr, "fatal error" # python2
 print("fatal error", file=sys.stderr) # python3
@@ -127,23 +139,25 @@ print("fatal error", file=sys.stderr) # python3
 
 Finally, parentheses are not as annoying after a couple of months :)
 
-It also worth mentioning, that printing of tab-aligned tables can be done without `str.join`:
+It also worth mentioning, that one can print tab-aligned tables without `str.join`:
 ```python
 print(*array, sep='\t')
 print(batch, epoch, loss, accuracy, time, sep='\t')
 ```
-## Formatted string literals for logging
+## f-strings for logging
 
 Quite typically data scientist outputs iteratively some logging information as in a fixed format. 
+It is common to have a code like:
 
 ```python
+# python2
 print('{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}'.format(
     batch=batch, epoch=epoch, total_epochs=total_epochs, 
     acc_mean=numpy.mean(accuracies), acc_std=numpy.std(accuracies),
     avg_time=time / len(data_batch)
 ))
 
-
+# python3
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
@@ -152,9 +166,10 @@ Sample output:
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
-Default logging system provides the flexibility (template and formatted values are independent) that is not required in research code. 
-This comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
+Default formatting system provides the flexibility (template and formatted values are independent) that is not required in research code. 
+This flexibity comes at the cost of being either too verbose and writing the code that is too prone to errors during editing (if you use positional coding).
 
+TODO стоит проговорить про 
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -168,7 +183,7 @@ velocity = data['distance'] / data['time']
 ```
 
 Result in python2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
-In python3, result is correct in both cases, promotion. 
+In python3, result is correct in both cases, promotion to float happens autotically when needed. 
 
 Another case is integer division, which is now an explicit operation:
 
@@ -199,6 +214,9 @@ for model in trained_models:
 ```
 
 - Prevents from occasional sorting of instances of different types
+  ```python
+  sorted([2, '1', 3])  # invalid for python3, in python2 returns [2, 3, '1']
+  ```
 - Generally, resolves some problems that arise when processing raw data
 
 Sidenote: proper check for None is
@@ -229,23 +247,26 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 ```python
 print(len('您好'))
 ```
-Python2 outputs 6, python3 outputs 2. 
+Output:
+- python2: `6`
+- python3: `2`. 
 
 ```
 x = u'со'
 x += 'со'
 ```
-python2 fails, python3 works as expected (because I've used russian letters in this example).
+python2 fails, python3 works as expected (because I've used russian letters in strings).
 
 In python3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
 
 There are less obvious things, for instance:
+
 ```python
 print(sorted([u'a', 'a']))
 print(sorted(['a', u'a']))
 ```
 
-Python2 output:
+Python2 outputs:
 ```
 [u'a', 'a']
 ['a', u'a']
@@ -270,7 +291,7 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 You can actually achieve close compression with `protocol=2` parameter, but developers typically ignore this option (or simply not aware of it). 
 
 
-## OrderedDict is faster now
+## OrderedDict is faster 
 
 OrderedDict is probably the most used structure after list. It a good old dictionary, which keeps the order in which keys were added. 
 
@@ -293,6 +314,7 @@ isinstance(x, int) # python3, easiest to remember
 
 ## Other stuff
 
+- `Enum`s
 - yield from 
 - async / await
 
@@ -322,25 +344,27 @@ isinstance(x, int) # python3, easiest to remember
   
   Quite typically, you can resolve it by converting to list.
 
-# Main problem for education
+## Main problems for teaching machine learning and data science with python 
 
-Data science courses will struggle with some of the changes.
+Data science courses struggle with some of the changes (but python is still the most reasonable option).
 
 Course authors should spend time in the beginning to explain what is an iterator, 
 why is can't be sliced / concatenated like a string (and how to deal with it).
 
+
+
 # Conclusion
 
-Python3 is with us for almost 10 years, but right now it it time that you *should* move to python3.
+Python2 and Python3 co-exist for almost 10 years, but right now it it time that you *should* move to python3.
 
 There are issues with migration, but the advantages worth it.
 Your research and production code should benefit significantly from moving to python3-only codebase.
 
-And I can't wait the bright moment when libraries can drop support for python2 (which will happen quite soon) and completely enjoy new language features that were not backported.
+And I can't wait the bright moment when libraries can drop support for python2 (which will happen quite soon) and completely enjoy new language features.
 
 Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
 ### Links
 
-- http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html (и смотри внутри)
+- [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 
