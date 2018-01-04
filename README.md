@@ -8,7 +8,7 @@ However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is st
 By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
 As for numpy, after 2018 any new feature releases will support [only Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
-To make transition more joyful, I've collected a bunch of Python 3 features that you may find useful 
+To make transition less frustrative, I've collected a bunch of Python 3 features that you may find useful
 (and worth migrating faster). 
 
 
@@ -30,8 +30,8 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-Previously it was always tempting to use string concatenation (which is obviously bad, but more concise), 
-with `pathlib` code is safe, concise, and readable.
+Previously it was always tempting to use string concatenation (which is concise, but obviously bad), 
+with `pathlib` the code is safe, concise, and readable.
 
 Also `pathlib.Path` has a bunch of methods, that every python novice had to google (and anyone who is not working with files all the time):
 
@@ -51,7 +51,7 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 
 ## Type hinting is now part of the language
 
-Example of type hinting in pycharm <br/>
+Example of type hinting in pycharm: <br/>
 <img src='pycharm-type-hinting.png' />
 
 Python is not just a language for small scripts anymore, 
@@ -77,12 +77,16 @@ def convert_to_grayscale(images):
 Еще нужно return doctypes продемонстрировать, IDE контролирует, когда возвращается что-то не то.
 
 ```python
-def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[tensor, float]:
+def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[float, float]:
   ...
+  loss = loss.mean()
+  accuracy = (predicted == label).mean()
   return loss, accuracy
 ```
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
+If you're using dynamic graphs (with pytorch, chainer or somewhat alike), 
+passing loss as tensor may also drive to memory overflow, because computation graph components would not be released.
 
 If you have a significant codebase, hint tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
 
@@ -95,7 +99,7 @@ Sidenote: unfortunately, right now hinting is not yet powerful enough to provide
 By default, type hinting does not influence how your code is working, but merely helps you to point code intentions.
 
 However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
-this may be helpful during debugging.
+this can help you in debugging.
 
 ```python
 @enforce.runtime_validation
@@ -175,8 +179,10 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     # Python 3
     _print = print # store the original print function
     def print(*args, **kargs):
-        pass  # or do something useful, e.g. store output to some file
+        pass  # do something useful, e.g. store output to some file
     ```
+    In jupyter it is desireable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
+    
 - `print` can participate in list comprehensions and other language constructs 
     ```python
     # Python 3
@@ -426,11 +432,11 @@ why is can't be sliced / concatenated like a string (and how to deal with it).
 Python 2 and Python 3 co-exist for almost 10 years, but right now it is time that we *should* move to Python 3.
 
 There are issues with migration, but the advantages worth it.
-Your research and production code should benefit significantly from moving to Python 3-only codebase.
+Your research and production code should become safer, shorter, and more readable after moving to Python 3-only codebase.
 
 And I can't wait for the bright moment when libraries drop support for Python 2 and completely enjoy new language features.
 
-Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
 ### Links
 
