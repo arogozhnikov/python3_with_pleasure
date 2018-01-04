@@ -353,14 +353,6 @@ Three times less space. And it is *much* faster.
 Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
 
 
-<!--
-## OrderedDict is faster now 
-
-OrderedDict is probably the most used structure after list in my experiments. 
-It a good old dictionary, which keeps the order in which keys were added. 
-https://docs.python.org/3.1/whatsnew/3.1.html
--->
-
 ## Safer comprehensions
 
 ```python
@@ -389,8 +381,9 @@ isinstance(x, int)              # Python 3, easier to remember
 
 - `Enum`s
 - yield from 
+- async / await
 - keyword-only arguments  `def f(a, b, *, option=True):` allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
-- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter + cloud) only supports Python 3.4
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) only support Python 3.4
 
 
 ## Main problems for code in data science and how to resolve those
