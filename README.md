@@ -51,8 +51,8 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 
 ## Type hinting is now part of the language
 
+Example of type hinting in pycharm <br/>
 <img src='pycharm-type-hinting.png' />
-<span style='font-size: 0.5em;'>type hinting in pycharm</span>
 
 Python is not just a language for small scripts anymore, 
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
@@ -89,11 +89,11 @@ A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfi
 
 Sidenote: unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
 
-## Type hinting -> type checking in runtime
+## Type hinting → type checking in runtime
 
 By default, type hinting does not influence how your code is working, but merely helps you to point code intentions.
 
-However, you can enforce type checking in runtime with tools like [enforce](https://github.com/RussBaz/enforce), 
+However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
 this may be helpful during debugging.
 
 ```
@@ -129,11 +129,11 @@ The code with `@` becomes more readable and more translatable between deep learn
 
 ## Globbing with `**`
 
-Recursive folder globbing is not easy in python2, even custom module [glob2](https://github.com/miracle2k/python-glob2) exists that overcomes this. Recursive flag is supported since Python 3.6:
+Recursive folder globbing is not easy in Python 2, even custom module [glob2](https://github.com/miracle2k/python-glob2) exists that overcomes this. Recursive flag is supported since Python 3.6:
 
 ```python
 import glob
-# python2
+# Python 2
 
 found_images = \
     glob.glob('/path/*.jpg') \
@@ -142,13 +142,14 @@ found_images = \
   + glob.glob('/path/*/*/*/*.jpg') \
   + glob.glob('/path/*/*/*/*/*.jpg') 
 
-# python3
+# Python 3
 
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
 Better option is to use `pathlib` in python3 (minus one import!):
 ```python
+# Python 3
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
 
@@ -158,22 +159,26 @@ Yes, code now has these annoying parentheses, but there are some advantages:
 
 - simple syntax for using file descriptor:
     ```python
-    print >>sys.stderr, "critical error"      # python2
-    print("critical error", file=sys.stderr)  # python3
+    # Python 3
+    print >>sys.stderr, "critical error"      # Python 2
+    print("critical error", file=sys.stderr)  # Python 3
     ```
 - printing tab-aligned tables without `str.join`:
     ```python
+    # Python 3
     print(*array, sep='\t')
     print(batch, epoch, loss, accuracy, time, sep='\t')
     ```
 - hacky suppressing / redirection of printing output:
     ```python
+    # Python 3
     _print = print # store the original print function
     def print(*args, **kargs):
         pass  # or do something useful, e.g. store output to some file
     ```
 - `print` can participate in list comprehensions and other language constructs 
     ```python
+    # Python 3
     result = process(x) if is_valid(x) else print('invalid item: ', x)
     ```
 
@@ -186,14 +191,14 @@ Quite typically data scientist outputs iteratively some logging information as i
 It is common to have a code like:
 
 ```python
-# python2
+# Python 2
 print('{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}'.format(
     batch=batch, epoch=epoch, total_epochs=total_epochs, 
     acc_mean=numpy.mean(accuracies), acc_std=numpy.std(accuracies),
     avg_time=time / len(data_batch)
 ))
 
-# python2 (too error-prone during fast modifications, please avoid):
+# Python 2 (too error-prone during fast modifications, please avoid):
 print('{:3} {:3} / {:3}  accuracy: {:0.4f}±{:0.4f} time: {:3.2f}'.format(
     batch, epoch, total_epochs, numpy.mean(accuracies), numpy.std(accuracies),
     time / len(data_batch)
@@ -207,6 +212,7 @@ Sample output:
 
 **f-strings** aka formatted string literals were introduced in Python 3.6:
 ```python
+# Python 3.6+
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
@@ -255,13 +261,13 @@ for model in trained_models:
 (3, 4) < (3, None)
 (4, 5) < [4, 5]
 
-# False in both Python2 and Python 3
+# False in both Python 2 and Python 3
 (4, 5) == [4, 5]
 ```
 
 - prevents from occasional sorting of instances of different types
   ```python
-  sorted([2, '1', 3])  # invalid for Python 3, in python2 returns [2, 3, '1']
+  sorted([2, '1', 3])  # invalid for Python 3, in Python 2 returns [2, 3, '1']
   ```
 - helps to spot some problems that arise when processing raw data
 
@@ -336,8 +342,8 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 # result: 8000162
 ```
 
-Three times less space.
-Actually close compression is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
+Three times less space. And it is *much* faster.
+Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
 
 
 <!--
@@ -354,28 +360,29 @@ https://docs.python.org/3.1/whatsnew/3.1.html
 labels = <initial_value>
 predictions = [model.predict(data) for data, labels in dataset]
 
-# labels are overwritten in python2
-# labels are not affected by comprehension in python3
+# labels are overwritten in Python 2
+# labels are not affected by comprehension in Python 3
 ```
 
 ## Single integer type
 
-Python2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
+Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
 
-Python3 has a single type `int`, which provides long arithmetics as well.
+Python 3 has a single type `int`, which provides long arithmetics as well.
 
 Checking for integer:
 
 ```
-isinstance(x, numbers.Integral) # python2, the canonical way
-isinstance(x, [long, int])      # python2
-isinstance(x, int)              # python3, easier to remember
+isinstance(x, numbers.Integral) # Python 2, the canonical way
+isinstance(x, [long, int])      # Python 2
+isinstance(x, int)              # Python 3, easier to remember
 ```
 
 ## Other stuff
 
 - `Enum`s
 - yield from 
+- keyword-only arguments  `def f(a, b, *args, option=True):` allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
 - async / await
 
 
@@ -395,7 +402,7 @@ isinstance(x, int)              # python3, easier to remember
   ```python
   {x:z for x, (y, z) in d.items()}
   ```
-  In general, comprehensions are also much better 'translatable' between python2 and python 3.
+  In general, comprehensions are also better 'translatable' between Python 2 and 3.
 
 - `map`, `.values()`, `.items()` do not return lists.
   Problem with iterators are:
@@ -420,7 +427,7 @@ Python 2 and Python 3 co-exist for almost 10 years, but right now it is time tha
 There are issues with migration, but the advantages worth it.
 Your research and production code should benefit significantly from moving to Python 3-only codebase.
 
-And I can't wait the bright moment when libraries can drop support for Python2 (which will happen quite soon) and completely enjoy new language features.
+And I can't wait for the bright moment when libraries drop support for Python 2 and completely enjoy new language features.
 
 Following migrations will be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
@@ -428,3 +435,4 @@ Following migrations will be smoother: ["we will never do this kind of backwards
 
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
+- [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
