@@ -18,11 +18,15 @@ To make transition more joyful, I've collected a bunch of Python 3 features that
 
 ```python
 from pathlib import Path
-dataset_root = Path('/path/to/dataset/') 
-train_path = dataset_root / 'train'
-test_path = dataset_root / 'test'
+
+dataset = 'wiki_images'
+datasets_root = Path('/path/to/datasets/') 
+
+train_path = datasets_root / dataset / 'train'
+test_path = datasets_root / dataset / 'test'
+
 for image_path in train_path.iterdir():
-    with image_path.open() as f: # note, open is a method of 
+    with image_path.open() as f: # note, open is a method of Path object
         # do something with an image
 ```
 
