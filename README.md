@@ -86,10 +86,9 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[float, flo
 
 (In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
 If you're using dynamic graphs (with pytorch, chainer or somewhat alike), 
-passing loss as tensor may also drive to memory overflow, because computation graph components would not be released.
+passing loss as tensor may also drive to memory overflow, because components of computational graph would not be released.
 
-If you have a significant codebase, hint tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
-
+If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
 Sidenote: unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
@@ -116,7 +115,7 @@ def foo(a: typing.Callable[[int, int], str]) -> str:
 ```
 
 
-## Matrix multiplication as @
+## Matrix multiplication with @
 
 Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization:
 
@@ -229,14 +228,12 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 For data science this is definitely a handy change (but not for system programming, I believe)
 
 ```python
-velocity = distance / time
-
 data = pandas.read_csv('timing.csv')
 velocity = data['distance'] / data['time']
 ```
 
 Result in Python 2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
-In Python 3, result is correct in both cases, promotion to float happens automatically when needed. 
+In Python 3, result is correct in both cases, because result of division is float. 
 
 Another case is integer division, which is now an explicit operation:
 
@@ -247,9 +244,10 @@ n_gifts = money // gift_price
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
 
 
-## Constants in math module
+## Constants in `math` module
 
 ```python
+# Python 3
 math.inf # 'largest' number
 math.nan # not a number
 
@@ -262,7 +260,7 @@ for model in trained_models:
 ## Strict ordering 
 
 ```python
-# will throw an exception in Python 3
+# All these comparisons are illegal in Python 3
 3 < '3'
 2 < None
 (3, 4) < (3, None)
@@ -379,14 +377,18 @@ isinstance(x, int)              # Python 3, easier to remember
 
 ## Other stuff
 
-- `Enum`s
-- yield from 
-- async / await
-- keyword-only arguments  `def f(a, b, *, option=True):` allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
-- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) only support Python 3.4
+- keyword-only arguments allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
+    - example  `def f(a, b, *, option=True):`
+    - user won't be able to write something like `numpy.unique(arr, True)`, but has to 
+- `Enum`s are theoreticlly useful, but 
+    - string-typing is already widely adopted in the python data stack 
+    - `Enum`s don't seem to interplay well with numpy and other libraries
+- coroutines also *sound* promising, but those are not qenuinely parallel, 
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) only support Python 3, 
+  so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
-## Main problems for code in data science and how to resolve those
+## Main problems for code in data science (and how to resolve those)
 
 - relative imports from subdirectories
   - packaging 
@@ -404,8 +406,7 @@ isinstance(x, int)              # Python 3, easier to remember
   ```
   In general, comprehensions are also better 'translatable' between Python 2 and 3.
 
-- `map`, `.values()`, `.items()` do not return lists.
-  Problem with iterators are:
+- `map()`, `.values()`, `.items()` return iterators, not lists. Main problems with iterators are:
   - no trivial slicing
   - can't be used twice
   
@@ -424,8 +425,7 @@ why is can't be sliced / concatenated like a string (and how to deal with it).
 
 Python 2 and Python 3 co-exist for almost 10 years, but right now it is time that we *should* move to Python 3.
 
-There are issues with migration, but the advantages worth it.
-Your research and production code should become safer, shorter, and more readable after moving to Python 3-only codebase.
+Your research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
 And I can't wait for the bright moment when libraries drop support for Python 2 and completely enjoy new language features.
 
