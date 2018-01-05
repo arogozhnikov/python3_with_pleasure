@@ -58,6 +58,7 @@ Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
 Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
+Previously different modules used custom ways to point types in doctrings
 
 For instance, the following code may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
 
@@ -106,12 +107,22 @@ def foo(text: str) -> None:
     print(text)
 
 foo('Hi') # ok
-foo(5)    # fails   
+foo(5)    # fails
 
-# enforce also supports callable arguments
+
 @enforce.runtime_validation
-def foo(a: typing.Callable[[int, int], str]) -> str:
-    return a(5, 6)
+def any2(x: List[bool]) -> bool:
+    return any(x)
+
+any ([False, False, True, False]) # True
+any2([False, False, True, False]) # True
+
+any (['False']) # True
+any2(['False']) # fails
+
+any ([False, None, "", 0]) # False
+any2([False, None, "", 0]) # fails
+
 ```
 
 
