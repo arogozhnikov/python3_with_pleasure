@@ -33,7 +33,7 @@ for image_path in train_path.iterdir():
 Previously it was always tempting to use string concatenation (which is concise, but obviously bad), 
 with `pathlib` the code is safe, concise, and readable.
 
-Also `pathlib.Path` has a bunch of methods, that every python novice had to google (and anyone who is not working with files all the time):
+Also `pathlib.Path` has a bunch of methods, that every python novice previously had to google:
 
 ```python
 p.exists()
@@ -384,7 +384,7 @@ isinstance(x, int)              # Python 3, easier to remember
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay well with numpy and other libraries
 - coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild 
-- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) only support Python 3, 
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) and django only support Python 3, 
   so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
