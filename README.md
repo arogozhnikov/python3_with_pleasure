@@ -395,7 +395,7 @@ isinstance(x, int)              # Python 3, easier to remember
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay well with numpy and other libraries
 - coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild 
-- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud) and django only support Python 3, 
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, 
   so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
