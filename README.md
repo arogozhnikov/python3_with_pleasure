@@ -444,6 +444,7 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 ### Links
 
+- [http://python-3-for-scientists.readthedocs.io/en/latest/](Python 3 for scientists)
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
@@ -451,7 +452,7 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 # TODO
 
-- super
+- super()
 - dict-base configurtion for logging
 - `__next__` ?
 - stable ABI
