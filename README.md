@@ -447,3 +447,12 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
+- [Trust me, python 3.3 is better that 2.7 video](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
+
+# TODO
+
+- super
+- dict-base configurtion for logging
+- `__next__` ?
+- stable ABI
+- не надо поддерживать py2vspy3
