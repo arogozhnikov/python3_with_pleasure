@@ -96,7 +96,7 @@ Sidenote: unfortunately, right now hinting is not yet powerful enough to provide
 
 ## Type hinting → type checking in runtime
 
-By default, type hinting does not influence how your code is working, but merely helps you to point code intentions.
+By default, function annotations do not influence how your code is working, but merely helps you to point code intentions.
 
 However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
 this can help you in debugging.
@@ -125,6 +125,26 @@ any2([False, None, "", 0]) # fails
 
 ```
 
+## Other usages of function annotations 
+
+As mentioned before, annotations do not influence code execution, but rather provide some meta-information, 
+and you can use it as you wish. 
+
+For instance, measure units is a common pain in scientific areas,`astropy` [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
+```python
+# Python 3
+from astropy import units as u
+@u.quantity_input()
+def frequency(speed: u.meter / u.s, wavelength: u.m) -> u.terahertz:
+    return speed / wavelength
+    
+frequency(speed=300_000 * u.km / u.s, wavelength=555 * u.nm)
+# output: 540.5405405405404 THz, frequency of green visible light
+```
+
+If you're processing tabular scientific data in python (not necessarily astronomical), you should give `astropy` a shot.
+
+You can also define your application-specific decorators to perform control / conversion of inputs and output in the same manner.
 
 ## Matrix multiplication with @
 
@@ -457,3 +477,4 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - `__next__` ?
 - stable ABI
 - не надо поддерживать py2vspy3
+- fixed order of **kwargs, python 3.6
