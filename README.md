@@ -406,6 +406,28 @@ isinstance(x, [long, int])      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
 ```
 
+## Multiple unpacking
+
+Here is how you merge two dicts:
+```python
+x = dict(a=1, b=2)
+y = dict(b=3, d=4)
+# Python 3.5+
+z = {**x, **y} 
+# z = {'a': 1, 'b': 3, 'd': 4}, note that 
+```
+
+See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for comparison with Python 2.
+
+Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
+```
+Python 3.5+
+do_something(**{**default_settings, **custom_settings})
+
+# This is also possible, but this will also check that there is no intersection between keys of dictionaries
+do_something(**first_args, **second_args)
+```
+
 ## Other stuff
 
 - keyword-only arguments allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
