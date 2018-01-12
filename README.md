@@ -334,23 +334,17 @@ Python 2 fails, Python 3 works as expected (because I've used russian letters in
 
 In Python 3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
 
-There are less obvious funny things, for instance:
-
+There are other funny things, for instance:
 ```python
-print(sorted([u'a', 'a']))
-print(sorted(['a', u'a']))
+'a' < type < u'a'  # Python 2: True
+'a' < u'a'         # Python 2: False
 ```
 
-Python 2 outputs:
-```
-[u'a', 'a']
-['a', u'a']
-```
 
 ## Preserving order of dictionaries and **kwargs
 
 In python 3.6+ dicts behave like `OrderedDict` by default.
-This preserves order during dict comprehensions (and e.g. during json deserialization)
+This preserves order during dict comprehensions (and other operations, e.g. during json serialization/deserialization)
 
 ```python
 import json
@@ -375,7 +369,7 @@ model = nn.Sequential(OrderedDict([
           ('relu2', nn.ReLU())
         ]))
 
-# Python 3.6+, how it CAN be done, not supported right now in pytorch
+# Python 3.6+, how it *can* be done, not supported right now in pytorch
 model = nn.Sequential(
     conv1=nn.Conv2d(1,20,5),
     relu1=nn.ReLU(),
@@ -532,7 +526,7 @@ Python 2 and Python 3 co-exist for almost 10 years, but right now it is time tha
 Your research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
 Right now most libraries support both Python versions.
-And I can't wait for the bright moment when libraries drop support for Python 2 and enjoy new language features.
+And I can't wait for the bright moment when packages drop support for Python 2 and enjoy new language features.
 
 Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
@@ -542,11 +536,11 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
-- [Trust me, python 3.3 is better that 2.7 video](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
+- [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
 
 # TODO
 
 - dict-base configuration for logging (?)
 - `__next__` ?
-- stable ABI
-- не надо поддерживать py2vspy3
+- additional problems with unicode
+- unicode variables
