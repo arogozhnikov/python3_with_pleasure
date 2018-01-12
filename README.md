@@ -8,8 +8,7 @@ However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is st
 By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
 As for numpy, after 2018 any new feature releases will support [only Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
-To make transition less frustrative, I've collected a bunch of Python 3 features that you may find useful
-(and worth migrating faster). 
+To make transition less frustrative, I've collected a bunch of Python 3 features that you may find useful. 
 
 
 ## Better paths handling with `pathlib`
@@ -30,8 +29,8 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-Previously it was always tempting to use string concatenation (which is concise, but obviously bad), 
-with `pathlib` the code is safe, concise, and readable.
+Previously it was always tempting to use string concatenation (concise, but obviously bad), 
+now with `pathlib` the code is safe, concise, and readable.
 
 Also `pathlib.Path` has a bunch of methods, that every python novice previously had to google:
 
@@ -85,7 +84,7 @@ def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[float, flo
   return loss, accuracy
 ```
 
-(In most cases) IDE will spot an error if you forgot to convert an accuracy to float.
+(In most cases) IDE spots an error if you forgot to convert an accuracy to float.
 If you're using dynamic graphs (with pytorch, chainer or somewhat alike), 
 passing loss as tensor may also drive to memory overflow, because components of computational graph would not be released.
 
@@ -168,8 +167,8 @@ Recursive folder globbing is not easy in Python 2, even custom module [glob2](ht
 
 ```python
 import glob
-# Python 2
 
+# Python 2
 found_images = \
     glob.glob('/path/*.jpg') \
   + glob.glob('/path/*/*.jpg') \
@@ -178,7 +177,6 @@ found_images = \
   + glob.glob('/path/*/*/*/*/*.jpg') 
 
 # Python 3
-
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
@@ -194,7 +192,6 @@ Yes, code now has these annoying parentheses, but there are some advantages:
 
 - simple syntax for using file descriptor:
     ```python
-    # Python 3
     print >>sys.stderr, "critical error"      # Python 2
     print("critical error", file=sys.stderr)  # Python 3
     ```
@@ -320,11 +317,13 @@ if a: # WRONG check for None
 ## Unicode for NLP
 
 ```python
-print(len('您好'))
+s = '您好'
+print(len(s))
+print(s[:2])
 ```
 Output:
-- Python 2: `6`
-- Python 3: `2`. 
+- Python 2: `6\n��`
+- Python 3: `2\n您好`. 
 
 ```
 x = u'со'
@@ -347,6 +346,46 @@ Python 2 outputs:
 [u'a', 'a']
 ['a', u'a']
 ```
+
+## Preserving order of dictionaries and **kwargs
+
+In python 3.6+ dicts behave like `OrderedDict` by default.
+This preserves order during dict comprehensions (and e.g. during json deserialization)
+
+```python
+import json
+x = {str(i):i for i in range(5)}
+json.loads(json.dumps(x))
+# Python 2
+{u'1': 1, u'0': 0, u'3': 3, u'2': 2, u'4': 4}
+# Python 3
+{'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
+```
+
+Same applies to `**kwargs`, they're kept in the same order they appear in parameters. 
+Order is crucial when it comes to data pipelines, previously we had to write it like this:
+```
+from torch import nn
+
+# Python 2
+model = nn.Sequential(OrderedDict([
+          ('conv1', nn.Conv2d(1,20,5)),
+          ('relu1', nn.ReLU()),
+          ('conv2', nn.Conv2d(20,64,5)),
+          ('relu2', nn.ReLU())
+        ]))
+
+# Python 3.6+, how it CAN be done, not supported right now in pytorch
+model = nn.Sequential(
+    conv1=nn.Conv2d(1,20,5),
+    relu1=nn.ReLU(),
+    conv2=nn.Conv2d(20,64,5),
+    relu2=nn.ReLU())
+)        
+```
+
+Did you notice? Uniqueness of names is checked automatically!
+
 
 ## Iterable unpacking
 
@@ -392,6 +431,24 @@ predictions = [model.predict(data) for data, labels in dataset]
 # labels are not affected by comprehension in Python 3
 ```
 
+## Super, simply super()
+
+Python 2 super calls are a frequent sort of mistakes. 
+
+```python
+# Python 2
+class MySubClass(MySuperClass):
+    def __init__(self, name, **options):
+        super(MySubClass, self).__init__(name='subclass', **options)
+        
+# Python 3
+class MySubClass(MySuperClass):
+    def __init__(self, name, **options):
+        super().__init__(name='subclass', **options)
+```
+
+More on `super` and method resolution order on [stackoverlow](https://stackoverflow.com/questions/576169/understanding-python-super-with-init-methods).
+
 ## Single integer type
 
 Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
@@ -414,7 +471,7 @@ x = dict(a=1, b=2)
 y = dict(b=3, d=4)
 # Python 3.5+
 z = {**x, **y} 
-# z = {'a': 1, 'b': 3, 'd': 4}, note that 
+# z = {'a': 1, 'b': 3, 'd': 4}, note that value for `b` is taken from the latter dict.
 ```
 
 See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for comparison with Python 2.
@@ -428,25 +485,20 @@ do_something(**{**default_settings, **custom_settings})
 do_something(**first_args, **second_args)
 ```
 
-## Other stuff
+## Other stuff 
 
 - keyword-only arguments allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
     - example  `def f(a, b, *, option=True):`
-    - user won't be able to write something like `numpy.unique(arr, True)`, but has to 
+    - user won't be able to write something like `numpy.unique(arr, True)`, but has to specify name of parameter
 - `Enum`s are theoreticlly useful, but 
     - string-typing is already widely adopted in the python data stack 
-    - `Enum`s don't seem to interplay well with numpy and other libraries
-- coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild 
-- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, 
-  so features that sound useless for you are useful for libraries you'll probably want to use once.
+    - `Enum`s don't seem to interplay with numpy and categorical from pandas 
+- coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild. 
+- Python 3 has [stable ABI](https://www.python.org/dev/peps/pep-0384/)
+- some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
-## Main problems for code in data science (and how to resolve those)
-
-- relative imports from subdirectories
-  - packaging 
-  - sys.path.insert
-  - softlinks
+### Main problems for code migration in data science (and how to resolve those)
   
 - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
   ```
@@ -465,10 +517,9 @@ do_something(**first_args, **second_args)
   
   Almost all of the problems are resolved by converting result to list.
 
+- see [[Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)] when in trouble
 
-## Main problems for teaching machine learning and data science with python 
-
-Data science courses struggle with some of the changes (but python is still the most reasonable option).
+### Main problems for teaching machine learning and data science with python 
 
 Course authors should spend time in the beginning to explain what is an iterator, 
 why is can't be sliced / concatenated like a string (and how to deal with it).
@@ -480,7 +531,8 @@ Python 2 and Python 3 co-exist for almost 10 years, but right now it is time tha
 
 Your research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
-And I can't wait for the bright moment when libraries drop support for Python 2 and completely enjoy new language features.
+Right now most libraries support both Python versions.
+And I can't wait for the bright moment when libraries drop support for Python 2 and enjoy new language features.
 
 Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
 
@@ -494,9 +546,7 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 # TODO
 
-- super()
-- dict-base configurtion for logging
+- dict-base configuration for logging (?)
 - `__next__` ?
 - stable ABI
 - не надо поддерживать py2vspy3
-- fixed order of **kwargs, python 3.6
