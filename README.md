@@ -439,13 +439,12 @@ predictions = [model.predict(data) for data, labels in dataset]
 
 ## Super, simply super()
 
-Python 2 super calls are a frequent sort of mistakes. 
+Python 2 `super` calls are a frequent source of mistakes in code. 
 
 ```python
 # Python 2
 class MySubClass(MySuperClass):
     def __init__(self, name, **options):
-        # this call is a frequent source of mistakes in the code
         super(MySubClass, self).__init__(name='subclass', **options)
         
 # Python 3
@@ -488,7 +487,7 @@ Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsn
 Python 3.5+
 do_something(**{**default_settings, **custom_settings})
 
-# This is also possible, but this will also check that there is no intersection between keys of dictionaries
+# Also possible, this will also check there is no intersection between keys of dictionaries
 do_something(**first_args, **second_args)
 ```
 
@@ -496,7 +495,8 @@ do_something(**first_args, **second_args)
 
 - keyword-only arguments allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
     - example  `def f(a, b, *, option=True):`
-    - user won't be able to write something like `numpy.unique(arr, True)`, but has to specify name of parameter
+    - user won't be able to write something like `numpy.unique(arr, True)`, but has to specify name of parameter (`return_index=True`)
+    - best mechanism so far that allows keep good combination of reliability and flexibility of APIs 
 - `Enum`s are theoreticlly useful, but 
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay with numpy and categorical from pandas 
@@ -536,7 +536,7 @@ why is can't be sliced / concatenated like a string (and how to deal with it).
 
 Python 2 and Python 3 co-exist for almost 10 years, but now we *should* move to Python 3. 
 
-Your research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
+Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
 Right now most libraries support both Python versions.
 And I can't wait for the bright moment when packages drop support for Python 2 and enjoy new language features.
@@ -545,7 +545,7 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 ### Links
 
-- [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
+- [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
 - [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
@@ -555,3 +555,4 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 - python3 print logging?
 - unicode variables
+- async/await
