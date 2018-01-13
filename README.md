@@ -351,6 +351,8 @@ Counter('Möbelstück')
 - Python 2: `Counter({'\xc3': 2, 'b': 1, 'e': 1, 'c': 1, 'k': 1, 'M': 1, 'l': 1, 's': 1, 't': 1, '\xb6': 1, '\xbc': 1})`
 - Python 3: `Counter({'M': 1, 'ö': 1, 'b': 1, 'e': 1, 'l': 1, 's': 1, 't': 1, 'ü': 1, 'c': 1, 'k': 1})`
 
+You can handle all of this in Python 2 properly, but Python 3 is more friendly.
+
 ## Preserving order of dictionaries and **kwargs
 
 In python 3.6+ dicts behave like `OrderedDict` by default.
