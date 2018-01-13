@@ -524,7 +524,7 @@ do_something(**first_args, **second_args)
   
   Almost all of the problems are resolved by converting result to list.
 
-- see [[Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)] when in trouble
+- see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble
 
 ### Main problems for teaching machine learning and data science with python 
 
@@ -534,7 +534,7 @@ why is can't be sliced / concatenated like a string (and how to deal with it).
 
 # Conclusion
 
-Python 2 and Python 3 co-exist for almost 10 years, but right now it is time that we *should* move to Python 3.
+Python 2 and Python 3 co-exist for almost 10 years, but now we *should* move to Python 3. 
 
 Your research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
@@ -553,7 +553,5 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 # TODO
 
-- dict-base configuration for logging (?)
-- `__next__` ?
-- additional problems with unicode
+- python3 print logging?
 - unicode variables
