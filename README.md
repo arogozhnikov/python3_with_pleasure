@@ -10,6 +10,9 @@ As for numpy, after 2018 any new feature releases will support [only Python3](ht
 
 To make transition less frustrative, I've collected a bunch of Python 3 features that you may find useful. 
 
+<img src='https://uploads.toptal.io/blog/image/92216/toptal-blog-image-1457618659472-be2f380fe3aad41333427ecd5a1ec5c5.jpg' width=400 />
+
+Image from [Dario Bertini post (toptal)](https://www.toptal.com/python/python-3-is-it-worth-the-switch)
 
 ## Better paths handling with `pathlib`
 
@@ -340,6 +343,13 @@ There are other funny things, for instance:
 'a' < u'a'         # Python 2: False
 ```
 
+```python
+from collections import Counter
+Counter('Möbelstück')
+```
+
+- Python 2: `Counter({'\xc3': 2, 'b': 1, 'e': 1, 'c': 1, 'k': 1, 'M': 1, 'l': 1, 's': 1, 't': 1, '\xb6': 1, '\xbc': 1})`
+- Python 3: `Counter({'M': 1, 'ö': 1, 'b': 1, 'e': 1, 'l': 1, 's': 1, 't': 1, 'ü': 1, 'c': 1, 'k': 1})`
 
 ## Preserving order of dictionaries and **kwargs
 
@@ -356,8 +366,8 @@ json.loads(json.dumps(x))
 {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
 ```
 
-Same applies to `**kwargs`, they're kept in the same order they appear in parameters. 
-Order is crucial when it comes to data pipelines, previously we had to write it like this:
+Same applies to `**kwargs`, they're kept in the same order as they appear in parameters. 
+Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
 ```
 from torch import nn
 
@@ -378,7 +388,7 @@ model = nn.Sequential(
 )        
 ```
 
-Did you notice? Uniqueness of names is checked automatically!
+Did you notice? Uniqueness of names is also checked automatically!
 
 
 ## Iterable unpacking
@@ -433,6 +443,7 @@ Python 2 super calls are a frequent sort of mistakes.
 # Python 2
 class MySubClass(MySuperClass):
     def __init__(self, name, **options):
+        # this call is a frequent source of mistakes in the code
         super(MySubClass, self).__init__(name='subclass', **options)
         
 # Python 3
@@ -532,11 +543,11 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 ### Links
 
-- [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html) (и смотри внутри)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
 - [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
+- [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
 
 # TODO
 
