@@ -54,54 +54,56 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 ## Type hinting is now part of the language
 
 Example of type hinting in pycharm: <br/>
-<img src='pycharm-type-hinting.png' />
+<img src='images/pycharm-type-hinting.png' />
 
 Python is not just a language for small scripts anymore, 
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
 Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
-Previously different modules used custom ways to point types in doctrings
+Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy) 
+(Hint: pycharm can convert old docstrings to fresh typehinting). 
 
-For instance, the following code may work with dict, pandas.DataFrame, astropy.Frame, numpy.recarray and a dozen of other containers.
-
+As a simple example, the following code may work with  different types of data (that's what we like about python data stack).
 ```python
-def compute_time(data):
-    data['time'] = data['distance'] / data['velocity'] 
+def repeat_each_entry(data):
+    """ Each entry in the data is doubled 
+    <blah blah nobody reads the documentation till the end>
+    """
+    index = numpy.repeat(numpy.arange(len(data)), 2)
+    return data[index]
 ```
 
+This code e.g. works for `numpy.array` (incl. multidimenional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy` and some others. 
 
-Things are also quite complicated when operating with tensors, which may come from different frameworks.
-
+This code will work for pandas.Series, but in the wrong way:
 ```python
-def convert_to_grayscale(images):
-    return images.mean(axis=1)
+repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Series with Nones inside
 ```
 
-Еще нужно return doctypes продемонстрировать, IDE контролирует, когда возвращается что-то не то.
+This was code of two lines. Imagine how unpredictable behavior of a complex system, because just one function may misbehave. 
+Putting explicitly which types method expects is very helpful in large systems, this will warn you if function wasn't expected to get such arguments.
 
 ```python
-def train_on_batch(batch_data: tensor, batch_labels: tensor) -> Tuple[float, float]:
-  ...
-  loss = loss.mean()
-  accuracy = (predicted == label).mean()
-  return loss, accuracy
+def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
 ```
 
+<!--
 (In most cases) IDE spots an error if you forgot to convert an accuracy to float.
 If you're using dynamic graphs (with pytorch, chainer or somewhat alike), 
 passing loss as tensor may also drive to memory overflow, because components of computational graph would not be released.
+-->
 
 If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
-Sidenote: unfortunately, right now hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
+Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
 
 ## Type hinting → type checking in runtime
 
 By default, function annotations do not influence how your code is working, but merely helps you to point code intentions.
 
 However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
-this can help you in debugging.
+this can help you in debugging (there are many cases when type hinting is not working).
 
 ```python
 @enforce.runtime_validation
@@ -132,7 +134,7 @@ any2([False, None, "", 0]) # fails
 As mentioned before, annotations do not influence code execution, but rather provide some meta-information, 
 and you can use it as you wish. 
 
-For instance, measure units is a common pain in scientific areas,`astropy` [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
+For instance, measure units is a common pain in scientific areas, `astropy` package [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
 ```python
 # Python 3
 from astropy import units as u
@@ -212,12 +214,28 @@ Yes, code now has these annoying parentheses, but there are some advantages:
         pass  # do something useful, e.g. store output to some file
     ```
     In jupyter it is desireable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
-    
+
+    Below you see a conext manager that temporarily overrides behavior of print:
+    ```python
+    @contextlib.contextmanager
+    def replace_print():
+        import builtins
+        _print = print # saving old print function
+        # or use some other function here
+        builtins.print = lambda *args, **kargs: _print('new printing', *args, **kargs)
+        yield
+        builtins.print = _print
+
+    with replace_print():
+        <code here will invoke other print function>
+    ```
+    It is *not* a recommended approach, but a small dirty hack that is now possible.
 - `print` can participate in list comprehensions and other language constructs 
     ```python
     # Python 3
     result = process(x) if is_valid(x) else print('invalid item: ', x)
     ```
+
 
 ## f-strings for simple and reliable formatting
 
@@ -269,7 +287,7 @@ In Python 3, result is correct in both cases, because result of division is floa
 Another case is integer division, which is now an explicit operation:
 
 ```python
-n_gifts = money // gift_price
+n_gifts = money // gift_price  # correct for int and float arguments
 ```
 
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
@@ -282,7 +300,7 @@ Note, that this applies both to built-in types and to custom types provided by d
 math.inf # 'largest' number
 math.nan # not a number
 
-max_quality = -math.inf
+max_quality = -math.inf  # no more magic initial values!
 
 for model in trained_models:
     max_quality = max(max_quality, compute_quality(model, data))
@@ -390,7 +408,7 @@ model = nn.Sequential(
 )        
 ```
 
-Did you notice? Uniqueness of names is also checked automatically!
+Did you notice? Uniqueness of names is also checked automatically.
 
 
 ## Iterable unpacking
@@ -471,7 +489,7 @@ isinstance(x, int)              # Python 3, easier to remember
 
 ## Multiple unpacking
 
-Here is how you merge two dicts:
+Here is how you merge two dicts now:
 ```python
 x = dict(a=1, b=2)
 y = dict(b=3, d=4)
@@ -487,9 +505,11 @@ Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsn
 Python 3.5+
 do_something(**{**default_settings, **custom_settings})
 
-# Also possible, this will also check there is no intersection between keys of dictionaries
+# Also possible, this code also checks there is no intersection between keys of dictionaries
 do_something(**first_args, **second_args)
 ```
+
+
 
 ## Other stuff 
 
@@ -502,10 +522,11 @@ do_something(**first_args, **second_args)
     - `Enum`s don't seem to interplay with numpy and categorical from pandas 
 - coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild. 
 - Python 3 has [stable ABI](https://www.python.org/dev/peps/pep-0384/)
+- Python 3 supports unicode identifies (so `ω = Δφ / Δt` is ok), but you'd [better use good old ASCII names](https://stackoverflow.com/a/29855176/498892) 
 - some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
-### Main problems for code migration in data science (and how to resolve those)
+### Problems for code migration specific for data science (and how to resolve those)
   
 - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
   ```
@@ -529,12 +550,13 @@ do_something(**first_args, **second_args)
 ### Main problems for teaching machine learning and data science with python 
 
 Course authors should spend time in the beginning to explain what is an iterator, 
-why is can't be sliced / concatenated like a string (and how to deal with it).
+why is can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
 
+I think most of course authors would be happy to avoid these details, but now it is hardly possible.
 
 # Conclusion
 
-Python 2 and Python 3 co-exist for almost 10 years, but now we *should* move to Python 3. 
+Python 2 and Python 3 co-exist for almost 10 years, but we *should* move to Python 3. 
 
 Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
@@ -553,6 +575,4 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 # TODO
 
-- python3 print logging?
-- unicode variables
-- async/await
+- зафиксить проверку типов
