@@ -572,7 +572,3 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
 - [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
 - [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
-
-# TODO
-
-- зафиксить проверку типов
