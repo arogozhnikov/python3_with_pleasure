@@ -8,7 +8,7 @@ However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is st
 By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
 As for numpy, after 2018 any new feature releases will support [only Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
-To make transition less frustrative, I've collected a bunch of Python 3 features that you may find useful. 
+To make transition less frustrating, I've collected a bunch of Python 3 features that you may find useful. 
 
 <img src='https://uploads.toptal.io/blog/image/92216/toptal-blog-image-1457618659472-be2f380fe3aad41333427ecd5a1ec5c5.jpg' width=400 />
 
