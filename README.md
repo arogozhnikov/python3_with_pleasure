@@ -236,7 +236,7 @@ Yes, code now has these annoying parentheses, but there are some advantages:
 Default formatting system provides a flexibility that is not required in data experiments. 
 Resulting code is either too verbose or too fragile towards any changes.
 
-Quite typically data scientist outputs iteratively some logging information as in a fixed format. 
+Quite typically data scientist outputs iteratively some logging information in a fixed format. 
 It is common to have a code like:
 
 ```python
