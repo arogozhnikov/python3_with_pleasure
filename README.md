@@ -75,7 +75,7 @@ def repeat_each_entry(data):
 
 This code e.g. works for `numpy.array` (incl. multidimenional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy` and some others. 
 
-This code will work for pandas.Series, but in the wrong way:
+This code will work for `pandas.Series`, but in the wrong way:
 ```python
 repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Series with Nones inside
 ```
@@ -86,12 +86,6 @@ Putting explicitly which types method expects is very helpful in large systems, 
 ```python
 def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
 ```
-
-<!--
-(In most cases) IDE spots an error if you forgot to convert an accuracy to float.
-If you're using dynamic graphs (with pytorch, chainer or somewhat alike), 
-passing loss as tensor may also drive to memory overflow, because components of computational graph would not be released.
--->
 
 If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
@@ -457,7 +451,7 @@ predictions = [model.predict(data) for data, labels in dataset]
 
 ## Super, simply super()
 
-Python 2 `super` calls are a frequent source of mistakes in code. 
+Python 2 `super(...)` was a frequent source of mistakes in code. 
 
 ```python
 # Python 2
@@ -539,9 +533,9 @@ do_something(**first_args, **second_args)
   ```
   In general, comprehensions are also better 'translatable' between Python 2 and 3.
 
-- `map()`, `.values()`, `.items()` return iterators, not lists. Main problems with iterators are:
+- `map()`, `.keys()`, `.values()`, `.items()`, etc. return iterators, not lists. Main problems with iterators are:
   - no trivial slicing
-  - can't be used twice
+  - can't be iterated twice
   
   Almost all of the problems are resolved by converting result to list.
 
@@ -572,3 +566,8 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
 - [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
 - [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
+
+### License
+
+This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
+
