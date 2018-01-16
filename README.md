@@ -477,7 +477,7 @@ Here is how you check that value is integer:
 
 ```
 isinstance(x, numbers.Integral) # Python 2, the canonical way
-isinstance(x, [long, int])      # Python 2
+isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
 ```
 
