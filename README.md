@@ -73,7 +73,7 @@ def repeat_each_entry(data):
     return data[index]
 ```
 
-This code e.g. works for `numpy.array` (incl. multidimenional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy` and some others. 
+This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy` and some others. 
 
 This code will work for `pandas.Series`, but in the wrong way:
 ```python
@@ -207,16 +207,16 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     def print(*args, **kargs):
         pass  # do something useful, e.g. store output to some file
     ```
-    In jupyter it is desireable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
+    In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
 
-    Below you see a conext manager that temporarily overrides behavior of print:
+    Below you see a context manager that temporarily overrides behavior of print:
     ```python
     @contextlib.contextmanager
     def replace_print():
         import builtins
         _print = print # saving old print function
         # or use some other function here
-        builtins.print = lambda *args, **kargs: _print('new printing', *args, **kargs)
+        builtins.print = lambda *args, **kwargs: _print('new printing', *args, **kwargs)
         yield
         builtins.print = _print
 
@@ -511,7 +511,7 @@ do_something(**first_args, **second_args)
     - example  `def f(a, b, *, option=True):`
     - user won't be able to write something like `numpy.unique(arr, True)`, but has to specify name of parameter (`return_index=True`)
     - best mechanism so far that allows keep good combination of reliability and flexibility of APIs 
-- `Enum`s are theoreticlly useful, but 
+- `Enum`s are theoretically useful, but 
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay with numpy and categorical from pandas 
 - coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild. 
