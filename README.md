@@ -94,7 +94,7 @@ Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grai
 
 ## Type hinting → type checking in runtime
 
-By default, function annotations do not influence how your code is working, but merely helps you to point code intentions.
+By default, function annotations do not influence how your code is working, but merely help you to point code intentions.
 
 However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
 this can help you in debugging (there are many cases when type hinting is not working).
