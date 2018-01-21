@@ -367,7 +367,7 @@ You can handle all of this in Python 2 properly, but Python 3 is more friendly.
 
 ## Preserving order of dictionaries and **kwargs
 
-In python 3.6+ dicts behave like `OrderedDict` by default.
+In CPython 3.6+ dicts behave like `OrderedDict` by default (and [this is guaranteed in Python 3.7+](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)).
 This preserves order during dict comprehensions (and other operations, e.g. during json serialization/deserialization)
 
 ```python
@@ -380,7 +380,7 @@ json.loads(json.dumps(x))
 {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
 ```
 
-Same applies to `**kwargs`, they're kept in the same order as they appear in parameters. 
+Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters. 
 Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
 ```
 from torch import nn
