@@ -146,7 +146,7 @@ You can also define your application-specific decorators to perform control / co
 
 ## Matrix multiplication with @
 
-Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization:
+Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization (a.k.a. ridge regression):
 
 ```python
 # l2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
