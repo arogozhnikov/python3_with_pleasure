@@ -73,7 +73,7 @@ def repeat_each_entry(data):
     return data[index]
 ```
 
-This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy` and some others. 
+This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others. 
 
 This code will work for `pandas.Series`, but in the wrong way:
 ```python
