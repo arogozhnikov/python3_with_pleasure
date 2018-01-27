@@ -265,6 +265,11 @@ Sample output:
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
+Also, very handy when writing queries:
+```python
+query = f"INSERT INTO STATION VALUES (13, '{city}', '{state}', {latitude}, {longitude})"
+```
+
 
 ## Explicit difference between 'true division' and 'integer division'
 
@@ -459,12 +464,13 @@ More on `super` and method resolution order on [stackoverlow](https://stackoverf
 The most enjoyable thing about programming in languages like Java, C# and alike is that IDE makes very good suggestions,
 because type of each identifier is known before executing a program.
 
-In python this it is hard to achieve, but annotations can help you 
+In python this is hard to achieve, but annotations will help you 
 - write your expectations in a clear form 
-- and get good suggestions
+- and get good suggestions from IDE
 
 <img src='images/variable_annotations.png' /><br />
-Example of pycharm suggestions with variable annotations. This works even in when functions you use are not annotated.
+This is an example of PyCharm suggestions with variable annotations. 
+This works even in situations when functions you use are not annotated (e.g. due to backward compatibility).
 
 ## Multiple unpacking
 
