@@ -287,19 +287,6 @@ n_gifts = money // gift_price  # correct for int and float arguments
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
 
 
-## Constants in `math` module
-
-```python
-# Python 3
-math.inf # 'largest' number
-math.nan # not a number
-
-max_quality = -math.inf  # no more magic initial values!
-
-for model in trained_models:
-    max_quality = max(max_quality, compute_quality(model, data))
-```
-
 ## Strict ordering 
 
 ```python
@@ -467,19 +454,17 @@ class MySubClass(MySuperClass):
 
 More on `super` and method resolution order on [stackoverlow](https://stackoverflow.com/questions/576169/understanding-python-super-with-init-methods).
 
-## Single integer type
+## Better IDE suggestions with variable annotations
 
-Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
+The most enjoyable thing about programming in languages like Java, C# and alike is that IDE makes very good suggestions,
+because type of each identifier is known before executing a program.
 
-Python 3 has a single type `int`, which incorporates long arithmetics.
+In python this it is hard to achieve, but annotations can help you 
+- write your expectations in a clear form 
+- and get good suggestions
 
-Here is how you check that value is integer:
-
-```
-isinstance(x, numbers.Integral) # Python 2, the canonical way
-isinstance(x, (long, int))      # Python 2
-isinstance(x, int)              # Python 3, easier to remember
-```
+<img src='images/variable_annotations.png' /><br />
+Example of pycharm suggestions with variable annotations. This works even in when functions you use are not annotated.
 
 ## Multiple unpacking
 
@@ -503,7 +488,32 @@ do_something(**{**default_settings, **custom_settings})
 do_something(**first_args, **second_args)
 ```
 
+## Minor: constants in `math` module
 
+```python
+# Python 3
+math.inf # 'largest' number
+math.nan # not a number
+
+max_quality = -math.inf  # no more magic initial values!
+
+for model in trained_models:
+    max_quality = max(max_quality, compute_quality(model, data))
+```
+
+## Minor: single integer type
+
+Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
+
+Python 3 has a single type `int`, which incorporates long arithmetics.
+
+Here is how you check that value is integer:
+
+```
+isinstance(x, numbers.Integral) # Python 2, the canonical way
+isinstance(x, (long, int))      # Python 2
+isinstance(x, int)              # Python 3, easier to remember
+```
 
 ## Other stuff 
 
