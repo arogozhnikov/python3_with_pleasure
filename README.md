@@ -485,6 +485,13 @@ z = {**x, **y}
 
 See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for comparison with Python 2.
 
+The aame approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
+```python
+[*a, *b, *c] # list, concatenating 
+(*a, *b, *c) # tuple, concatenating 
+{*a, *b, *c} # set, union 
+```
+
 Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
 ```
 Python 3.5+
@@ -573,8 +580,8 @@ isinstance(x, int)              # Python 3, easier to remember
 
 ### Main problems for teaching machine learning and data science with python 
 
-Course authors should spend time in the beginning to explain what is an iterator, 
-why is can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
+Course authors should spend time at first lectures to explain what is an iterator, 
+why it can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
 
 I think most of course authors would be happy to avoid these details, but now it is hardly possible.
 
