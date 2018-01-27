@@ -494,6 +494,24 @@ do_something(**{**default_settings, **custom_settings})
 do_something(**first_args, **second_args)
 ```
 
+## Future-proof APIs with keyword-only arguments
+
+Let's consider this snippet
+```python
+model = sklearn.svm.SVC(2, 'poly', 2, 4, 0.5)
+```
+Obviously, an author of this code didn't get Python style of coding yet (most probably, just jumped from cpp or rust). 
+Unfortunately, this is not just question of taste, because changing the order of arguments (adding/deleting) in `SVC` will break this code. In particular, `sklearn` does some reordering/renaming from time to time of numerous algorithm parameters to provide consistent API. Each such refactoring may drive to broken code.
+
+In Python 3, library authors may demand explicitly naming parameters by using `*`:
+```
+class SVC(BaseSVC):
+    def __init__(self, *, C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, ... )
+```                 
+- users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
+- this mechanism provides a great combination of reliability and flexibility of APIs 
+
+
 ## Minor: constants in `math` module
 
 ```python
@@ -523,10 +541,6 @@ isinstance(x, int)              # Python 3, easier to remember
 
 ## Other stuff 
 
-- keyword-only arguments allows much [simpler creation of 'future-proof APIs'](http://www.asmeurer.com/python3-presentation/slides.html#12)
-    - example  `def f(a, b, *, option=True):`
-    - user won't be able to write something like `numpy.unique(arr, True)`, but has to specify name of parameter (`return_index=True`)
-    - best mechanism so far that allows keep good combination of reliability and flexibility of APIs 
 - `Enum`s are theoretically useful, but 
     - string-typing is already widely adopted in the python data stack 
     - `Enum`s don't seem to interplay with numpy and categorical from pandas 
