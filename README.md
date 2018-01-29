@@ -265,11 +265,11 @@ Sample output:
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
-Also, very handy when writing queries:
+Also, very handy when writing queries or generate code fragments:
 ```python
 query = f"INSERT INTO STATION VALUES (13, '{city}', '{state}', {latitude}, {longitude})"
 ```
-
+Important: don't forget to escape arguments to prevent [SQL injection attacks](https://en.wikipedia.org/wiki/SQL_injection).
 
 ## Explicit difference between 'true division' and 'integer division'
 
