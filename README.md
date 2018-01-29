@@ -14,6 +14,44 @@ To make transition less frustrating, I've collected a bunch of Python 3 features
 
 Image from [Dario Bertini post (toptal)](https://www.toptal.com/python/python-3-is-it-worth-the-switch)
 
+
+Table of Contents
+=================
+
+   * [Migrating to Python 3 with pleasure](#migrating-to-python-3-with-pleasure)
+      * [A short guide on features of Python 3 for data scientists](#a-short-guide-on-features-of-python-3-for-data-scientists)
+      * [Contents](#contents)
+      * [Better paths handling with pathlib](#better-paths-handling-with-pathlib)
+      * [Type hinting is now part of the language](#type-hinting-is-now-part-of-the-language)
+      * [Type hinting → type checking in runtime](#type-hinting--type-checking-in-runtime)
+      * [Other usages of function annotations](#other-usages-of-function-annotations)
+      * [Matrix multiplication with @](#matrix-multiplication-with-)
+      * [Globbing with **](#globbing-with-)
+      * [Print is a function now](#print-is-a-function-now)
+      * [f-strings for simple and reliable formatting](#f-strings-for-simple-and-reliable-formatting)
+      * [Explicit difference between 'true division' and 'integer division'](#explicit-difference-between-true-division-and-integer-division)
+      * [Strict ordering](#strict-ordering)
+      * [Unicode for NLP](#unicode-for-nlp)
+      * [Preserving order of dictionaries and **kwargs](#preserving-order-of-dictionaries-and-kwargs)
+      * [Iterable unpacking](#iterable-unpacking)
+      * [Default pickle engine provides better compression for arrays](#default-pickle-engine-provides-better-compression-for-arrays)
+      * [Safer comprehensions](#safer-comprehensions)
+      * [Super, simply super()](#super-simply-super)
+      * [Better IDE suggestions with variable annotations](#better-ide-suggestions-with-variable-annotations)
+      * [Multiple unpacking](#multiple-unpacking)
+      * [Future-proof APIs with keyword-only arguments](#future-proof-apis-with-keyword-only-arguments)
+      * [Minor: constants in math module](#minor-constants-in-math-module)
+      * [Minor: single integer type](#minor-single-integer-type)
+      * [Other stuff](#other-stuff)
+         * [Problems for code migration specific for data science (and how to resolve those)](#problems-for-code-migration-specific-for-data-science-and-how-to-resolve-those)
+         * [Main problems for teaching machine learning and data science with python](#main-problems-for-teaching-machine-learning-and-data-science-with-python)
+   * [Conclusion](#conclusion)
+         * [Links](#links)
+         * [License](#license)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
+
+
 ## Better paths handling with `pathlib`
 
 `pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
