@@ -485,7 +485,7 @@ z = {**x, **y}
 
 See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for comparison with Python 2.
 
-The aame approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
+The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
 ```python
 [*a, *b, *c] # list, concatenating 
 (*a, *b, *c) # tuple, concatenating 
