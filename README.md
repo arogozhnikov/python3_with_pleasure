@@ -231,6 +231,25 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     ```
 
 
+## Underscores in Numeric Literal (Thousands Seperator)
+
+[PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
+In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number lieterals
+
+```python
+# grouping decimal numbers by thousands
+one_million = 1_000_000
+
+# grouping hexadecimal addresses by words
+addr = 0xCAFE_F00D
+
+# grouping bits into nibbles in a binary literal
+flags = 0b_0011_1111_0100_1110
+
+# same, for string conversions
+flags = int('0b_1111_0000', 2)
+```
+
 ## f-strings for simple and reliable formatting
 
 Default formatting system provides a flexibility that is not required in data experiments. 
