@@ -234,7 +234,7 @@ Yes, code now has these annoying parentheses, but there are some advantages:
 ## Underscores in Numeric Literal (Thousands Seperator)
 
 [PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
-In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number lieterals
+In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number literals.
 
 ```python
 # grouping decimal numbers by thousands
