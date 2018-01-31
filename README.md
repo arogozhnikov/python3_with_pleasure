@@ -35,12 +35,12 @@ for image_path in train_path.iterdir():
 Previously it was always tempting to use string concatenation (concise, but obviously bad), 
 now with `pathlib` the code is safe, concise, and readable.
 
-Also `pathlib.Path` has a bunch of methods, that every python novice previously had to google:
+Also `pathlib.Path` has a bunch of methods and properties, that every python novice previously had to google:
 
 ```python
 p.exists()
 p.is_dir()
-p.parts()
+p.parts
 p.with_name('sibling.png') # only change the name, but keep the folder
 p.with_suffix('.jpg') # only change the extension, but keep the folder and the name
 p.chmod(mode)
