@@ -4,11 +4,11 @@
 Python became a mainstream language for machine learning and other scientific fields that heavily operate with data;
 it boasts various deep learning frameworks and well-established set of tools for data processing and visualization.
 
-However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists. 
-By the end of 2019 scientific stack will [stop supporting Python2](http://www.python3statement.org).
-As for numpy, after 2018 any new feature releases will support [only Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
+However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists.
+By the end of 2019 the scientific stack will [stop supporting Python2](http://www.python3statement.org).
+As for numpy, after 2018 any new feature releases will only support [Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
-To make transition less frustrating, I've collected a bunch of Python 3 features that you may find useful. 
+To make the transition less frustrating, I've collected a bunch of Python 3 features that you may find useful.
 
 <img src='https://uploads.toptal.io/blog/image/92216/toptal-blog-image-1457618659472-be2f380fe3aad41333427ecd5a1ec5c5.jpg' width=400 />
 
@@ -22,7 +22,7 @@ Image from [Dario Bertini post (toptal)](https://www.toptal.com/python/python-3-
 from pathlib import Path
 
 dataset = 'wiki_images'
-datasets_root = Path('/path/to/datasets/') 
+datasets_root = Path('/path/to/datasets/')
 
 train_path = datasets_root / dataset / 'train'
 test_path = datasets_root / dataset / 'test'
@@ -32,7 +32,7 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-Previously it was always tempting to use string concatenation (concise, but obviously bad), 
+Previously it was always tempting to use string concatenation (concise, but obviously bad),
 now with `pathlib` the code is safe, concise, and readable.
 
 Also `pathlib.Path` has a bunch of methods and properties, that every python novice previously had to google:
@@ -47,7 +47,7 @@ p.chmod(mode)
 p.rmdir()
 ```
 
-`pathlib` should save you lots of time, 
+`pathlib` should save you lots of time,
 please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
 
 
@@ -56,38 +56,38 @@ please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference
 Example of type hinting in pycharm: <br/>
 <img src='images/pycharm-type-hinting.png' />
 
-Python is not just a language for small scripts anymore, 
+Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
 Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
-Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy) 
-(Hint: pycharm can convert old docstrings to fresh typehinting). 
+Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
+(Hint: pycharm can convert old docstrings to fresh typehinting).
 
-As a simple example, the following code may work with  different types of data (that's what we like about python data stack).
+As a simple example, the following code may work with different types of data (that's what we like about python data stack).
 ```python
 def repeat_each_entry(data):
-    """ Each entry in the data is doubled 
+    """ Each entry in the data is doubled
     <blah blah nobody reads the documentation till the end>
     """
     index = numpy.repeat(numpy.arange(len(data)), 2)
     return data[index]
 ```
 
-This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others. 
+This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others.
 
 This code will work for `pandas.Series`, but in the wrong way:
 ```python
 repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Series with Nones inside
 ```
 
-This was code of two lines. Imagine how unpredictable behavior of a complex system, because just one function may misbehave. 
-Putting explicitly which types method expects is very helpful in large systems, this will warn you if function wasn't expected to get such arguments.
+This was two lines of code. Imagine how unpredictable behavior of a complex system, because just one function may misbehave.
+Stating explicitly which types a method expects is very helpful in large systems, this will warn you if a function was passed unexpected arguments.
 
 ```python
 def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
 ```
 
-If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline. 
+If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline.
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
 Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
@@ -96,7 +96,7 @@ Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grai
 
 By default, function annotations do not influence how your code is working, but merely help you to point code intentions.
 
-However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce), 
+However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce),
 this can help you in debugging (there are many cases when type hinting is not working).
 
 ```python
@@ -123,19 +123,19 @@ any2([False, None, "", 0]) # fails
 
 ```
 
-## Other usages of function annotations 
+## Other usages of function annotations
 
-As mentioned before, annotations do not influence code execution, but rather provide some meta-information, 
-and you can use it as you wish. 
+As mentioned before, annotations do not influence code execution, but rather provide some meta-information,
+and you can use it as you wish.
 
-For instance, measure units is a common pain in scientific areas, `astropy` package [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
+For instance, measurement units are a common pain in scientific areas, `astropy` package [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
 ```python
 # Python 3
 from astropy import units as u
 @u.quantity_input()
 def frequency(speed: u.meter / u.s, wavelength: u.m) -> u.terahertz:
     return speed / wavelength
-    
+
 frequency(speed=300_000 * u.km / u.s, wavelength=555 * u.nm)
 # output: 540.5405405405404 THz, frequency of green visible light
 ```
@@ -159,10 +159,9 @@ X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 
 The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
 
-
 ## Globbing with `**`
 
-Recursive folder globbing is not easy in Python 2, even custom module [glob2](https://github.com/miracle2k/python-glob2) exists that overcomes this. Recursive flag is supported since Python 3.6:
+Recursive folder globbing is not easy in Python 2, even though the [glob2](https://github.com/miracle2k/python-glob2) custom module exists that overcomes this. A recursive flag is supported since Python 3.6:
 
 ```python
 import glob
@@ -173,13 +172,13 @@ found_images = \
   + glob.glob('/path/*/*.jpg') \
   + glob.glob('/path/*/*/*.jpg') \
   + glob.glob('/path/*/*/*/*.jpg') \
-  + glob.glob('/path/*/*/*/*/*.jpg') 
+  + glob.glob('/path/*/*/*/*/*.jpg')
 
 # Python 3
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
-Better option is to use `pathlib` in python3 (minus one import!):
+A better option is to use `pathlib` in python3 (minus one import!):
 ```python
 # Python 3
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
@@ -209,7 +208,7 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     ```
     In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
 
-    Below you see a context manager that temporarily overrides behavior of print:
+    Below you can see a context manager that temporarily overrides behavior of print:
     ```python
     @contextlib.contextmanager
     def replace_print():
@@ -224,7 +223,7 @@ Yes, code now has these annoying parentheses, but there are some advantages:
         <code here will invoke other print function>
     ```
     It is *not* a recommended approach, but a small dirty hack that is now possible.
-- `print` can participate in list comprehensions and other language constructs 
+- `print` can participate in list comprehensions and other language constructs
     ```python
     # Python 3
     result = process(x) if is_valid(x) else print('invalid item: ', x)
@@ -252,16 +251,16 @@ flags = int('0b_1111_0000', 2)
 
 ## f-strings for simple and reliable formatting
 
-Default formatting system provides a flexibility that is not required in data experiments. 
-Resulting code is either too verbose or too fragile towards any changes.
+The default formatting system provides a flexibility that is not required in data experiments.
+The resulting code is either too verbose or too fragile towards any changes.
 
-Quite typically data scientist outputs iteratively some logging information in a fixed format. 
+Quite typically data scientists outputs some logging information iteratively in a fixed format.
 It is common to have a code like:
 
 ```python
 # Python 2
 print('{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {acc_mean:0.4f}±{acc_std:0.4f} time: {avg_time:3.2f}'.format(
-    batch=batch, epoch=epoch, total_epochs=total_epochs, 
+    batch=batch, epoch=epoch, total_epochs=total_epochs,
     acc_mean=numpy.mean(accuracies), acc_std=numpy.std(accuracies),
     avg_time=time / len(data_batch)
 ))
@@ -299,8 +298,8 @@ data = pandas.read_csv('timing.csv')
 velocity = data['distance'] / data['time']
 ```
 
-Result in Python 2 depends on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
-In Python 3, result is correct in both cases, because result of division is float. 
+Results in Python 2 depend on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
+In Python 3, the result is correct in both cases, because the result of division is float.
 
 Another case is integer division, which is now an explicit operation:
 
@@ -311,7 +310,7 @@ n_gifts = money // gift_price  # correct for int and float arguments
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
 
 
-## Strict ordering 
+## Strict ordering
 
 ```python
 # All these comparisons are illegal in Python 3
@@ -334,7 +333,7 @@ Sidenote: proper check for None is (in both Python versions)
 ```python
 if a is not None:
   pass
-  
+
 if a: # WRONG check for None
   pass
 ```
@@ -349,7 +348,7 @@ print(s[:2])
 ```
 Output:
 - Python 2: `6\n��`
-- Python 3: `2\n您好`. 
+- Python 3: `2\n您好`.
 
 ```
 x = u'со'
@@ -391,7 +390,7 @@ json.loads(json.dumps(x))
 {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
 ```
 
-Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters. 
+Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters.
 Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
 ```
 from torch import nn
@@ -410,7 +409,7 @@ model = nn.Sequential(
     relu1=nn.ReLU(),
     conv2=nn.Conv2d(20,64,5),
     relu2=nn.ReLU())
-)        
+)
 ```
 
 Did you notice? Uniqueness of names is also checked automatically.
@@ -426,7 +425,7 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 *prev, next_to_last, last = values_history
 
 # This also works with any iterables, so if you have a function that yields e.g. qualities,
-# below is a simple way to take only last two values from a list 
+# below is a simple way to take only last two values from a list
 *prev, next_to_last, last = iter_train(args)
 ```
 
@@ -447,7 +446,7 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 ```
 
 Three times less space. And it is *much* faster.
-Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply not aware of it). 
+Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply are not aware of it).
 
 
 ## Safer comprehensions
@@ -462,14 +461,14 @@ predictions = [model.predict(data) for data, labels in dataset]
 
 ## Super, simply super()
 
-Python 2 `super(...)` was a frequent source of mistakes in code. 
+Python 2 `super(...)` was a frequent source of mistakes in code.
 
 ```python
 # Python 2
 class MySubClass(MySuperClass):
     def __init__(self, name, **options):
         super(MySubClass, self).__init__(name='subclass', **options)
-        
+
 # Python 3
 class MySubClass(MySuperClass):
     def __init__(self, name, **options):
@@ -480,15 +479,15 @@ More on `super` and method resolution order on [stackoverflow](https://stackover
 
 ## Better IDE suggestions with variable annotations
 
-The most enjoyable thing about programming in languages like Java, C# and alike is that IDE makes very good suggestions,
+The most enjoyable thing about programming in languages like Java, C# and alike is that IDE can make very good suggestions,
 because type of each identifier is known before executing a program.
 
-In python this is hard to achieve, but annotations will help you 
-- write your expectations in a clear form 
+In python this is hard to achieve, but annotations will help you
+- write your expectations in a clear form
 - and get good suggestions from IDE
 
 <img src='images/variable_annotations.png' /><br />
-This is an example of PyCharm suggestions with variable annotations. 
+This is an example of PyCharm suggestions with variable annotations.
 This works even in situations when functions you use are not annotated (e.g. due to backward compatibility).
 
 ## Multiple unpacking
@@ -498,17 +497,17 @@ Here is how you merge two dicts now:
 x = dict(a=1, b=2)
 y = dict(b=3, d=4)
 # Python 3.5+
-z = {**x, **y} 
+z = {**x, **y}
 # z = {'a': 1, 'b': 3, 'd': 4}, note that value for `b` is taken from the latter dict.
 ```
 
-See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for comparison with Python 2.
+See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for a comparison with Python 2.
 
 The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
 ```python
-[*a, *b, *c] # list, concatenating 
-(*a, *b, *c) # tuple, concatenating 
-{*a, *b, *c} # set, union 
+[*a, *b, *c] # list, concatenating
+(*a, *b, *c) # tuple, concatenating
+{*a, *b, *c} # set, union
 ```
 
 Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
@@ -526,16 +525,16 @@ Let's consider this snippet
 ```python
 model = sklearn.svm.SVC(2, 'poly', 2, 4, 0.5)
 ```
-Obviously, an author of this code didn't get Python style of coding yet (most probably, just jumped from cpp or rust). 
+Obviously, an author of this code didn't get the Python style of coding yet (most probably, just jumped from cpp or rust).
 Unfortunately, this is not just question of taste, because changing the order of arguments (adding/deleting) in `SVC` will break this code. In particular, `sklearn` does some reordering/renaming from time to time of numerous algorithm parameters to provide consistent API. Each such refactoring may drive to broken code.
 
-In Python 3, library authors may demand explicitly naming parameters by using `*`:
+In Python 3, library authors may demand explicitly named parameters by using `*`:
 ```
 class SVC(BaseSVC):
     def __init__(self, *, C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, ... )
-```                 
+```
 - users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
-- this mechanism provides a great combination of reliability and flexibility of APIs 
+- this mechanism provides a great combination of reliability and flexibility of APIs
 
 
 ## Minor: constants in `math` module
@@ -565,24 +564,24 @@ isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
 ```
 
-## Other stuff 
+## Other stuff
 
-- `Enum`s are theoretically useful, but 
-    - string-typing is already widely adopted in the python data stack 
-    - `Enum`s don't seem to interplay with numpy and categorical from pandas 
-- coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild. 
+- `Enum`s are theoretically useful, but
+    - string-typing is already widely adopted in the python data stack
+    - `Enum`s don't seem to interplay with numpy and categorical from pandas
+- coroutines also *sound* very promising for data pipelining (see [slides](http://www.dabeaz.com/coroutines/Coroutines.pdf) by David Beazley), but I don't see their adoption in the wild.
 - Python 3 has [stable ABI](https://www.python.org/dev/peps/pep-0384/)
-- Python 3 supports unicode identifies (so `ω = Δφ / Δt` is ok), but you'd [better use good old ASCII names](https://stackoverflow.com/a/29855176/498892) 
+- Python 3 supports unicode identifies (so `ω = Δφ / Δt` is ok), but you'd [better use good old ASCII names](https://stackoverflow.com/a/29855176/498892)
 - some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, so features that sound useless for you are useful for libraries you'll probably want to use once.
 
 
 ### Problems for code migration specific for data science (and how to resolve those)
-  
+
 - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
   ```
   map(lambda x, (y, z): x, z, dict.items())
   ```
-  
+
   However, it is still perfectly working with different comprehensions:
   ```python
   {x:z for x, (y, z) in d.items()}
@@ -592,21 +591,21 @@ isinstance(x, int)              # Python 3, easier to remember
 - `map()`, `.keys()`, `.values()`, `.items()`, etc. return iterators, not lists. Main problems with iterators are:
   - no trivial slicing
   - can't be iterated twice
-  
+
   Almost all of the problems are resolved by converting result to list.
 
 - see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble
 
-### Main problems for teaching machine learning and data science with python 
+### Main problems for teaching machine learning and data science with python
 
-Course authors should spend time at first lectures to explain what is an iterator, 
+Course authors should spend time in the first lectures to explain what is an iterator,
 why it can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
 
-I think most of course authors would be happy to avoid these details, but now it is hardly possible.
+I think most course authors would be happy to avoid these details, but now it is hardly possible.
 
 # Conclusion
 
-Python 2 and Python 3 co-exist for almost 10 years, but we *should* move to Python 3. 
+Python 2 and Python 3 have co-existed for almost 10 years, but we *should* move to Python 3.
 
 Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
