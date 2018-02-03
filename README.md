@@ -161,7 +161,7 @@ The code with `@` becomes more readable and more translatable between deep learn
 
 ## Globbing with `**`
 
-Recursive folder globbing is not easy in Python 2, even though the [glob2](https://github.com/miracle2k/python-glob2) custom module exists that overcomes this. A recursive flag is supported since Python 3.6:
+Recursive folder globbing is not easy in Python 2, even though the [glob2](https://github.com/miracle2k/python-glob2) custom module exists that overcomes this. A recursive flag is supported since Python 3.5:
 
 ```python
 import glob
