@@ -345,7 +345,7 @@ Output:
 - Python 2: `6\n��`
 - Python 3: `2\n您好`.
 
-```
+```python
 x = u'со'
 x += 'co' # ok
 x += 'со' # fail
@@ -387,7 +387,7 @@ json.loads(json.dumps(x))
 
 Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters.
 Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
-```
+```python
 from torch import nn
 
 # Python 2
@@ -506,8 +506,8 @@ The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any 
 ```
 
 Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
-```
-Python 3.5+
+```python
+# Python 3.5+
 do_something(**{**default_settings, **custom_settings})
 
 # Also possible, this code also checks there is no intersection between keys of dictionaries
@@ -524,7 +524,7 @@ Obviously, an author of this code didn't get the Python style of coding yet (mos
 Unfortunately, this is not just question of taste, because changing the order of arguments (adding/deleting) in `SVC` will break this code. In particular, `sklearn` does some reordering/renaming from time to time of numerous algorithm parameters to provide consistent API. Each such refactoring may drive to broken code.
 
 In Python 3, library authors may demand explicitly named parameters by using `*`:
-```
+```python
 class SVC(BaseSVC):
     def __init__(self, *, C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, ... )
 ```
@@ -553,7 +553,7 @@ Python 3 has a single type `int`, which incorporates long arithmetics.
 
 Here is how you check that value is integer:
 
-```
+```python
 isinstance(x, numbers.Integral) # Python 2, the canonical way
 isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
@@ -573,7 +573,7 @@ isinstance(x, int)              # Python 3, easier to remember
 ### Problems for code migration specific for data science (and how to resolve those)
 
 - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
-  ```
+  ```python
   map(lambda x, (y, z): x, z, dict.items())
   ```
 
