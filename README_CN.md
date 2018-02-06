@@ -23,3 +23,57 @@ As for numpy, after 2018 any new feature releases will only support [Python3](ht
 ## `pathlib`提供了更好的路径处理
 
 > `pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
+
+`pathlib` 是Python 3 一个默认的组件，有助于避免大量使用`os.path.join`：
+
+```python
+from pathlib import Path
+
+dataset = 'wiki_images'
+datasets_root = Path('/path/to/datasets/')
+
+train_path = datasets_root / dataset / 'train'
+test_path = datasets_root / dataset / 'test'
+
+for image_path in train_path.iterdir():
+    with image_path.open() as f: # note, open is a method of Path object
+        # do something with an image
+```
+
+> Previously it was always tempting to use string concatenation (concise, but obviously bad),
+now with `pathlib` the code is safe, concise, and readable.
+
+以前，人们倾向于使用字符串连接（虽然简洁，但明显不好）；现在，代码中用`pathlib`是安全的，简洁的，并且更有可读性。
+
+> Also `pathlib.Path` has a bunch of methods and properties, that every python novice previously had to google:
+
+此外，`pathlib.Path`有大量的方法和属性，每一位 Python 早期的初学者不得不谷歌了解：
+
+```python
+p.exists()
+p.is_dir()
+p.parts
+p.with_name('sibling.png') # only change the name, but keep the folder
+p.with_suffix('.jpg') # only change the extension, but keep the folder and the name
+p.chmod(mode)
+p.rmdir()
+```
+
+> `pathlib` should save you lots of time,
+please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
+
+`pathlib` 应当会节省大量时间，请参看[文档](https://docs.python.org/3/library/pathlib.html)以及[指南](https://pymotw.com/3/pathlib/)了解更多。
+
+
+## 类型提示现在已是这语言的一部分
+
+> Example of type hinting in pycharm: <br/>
+
+pycharm环境类型提示的例子：
+
+<img src='images/pycharm-type-hinting.png' />
+
+> Python is not just a language for small scripts anymore,
+data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
+
+
