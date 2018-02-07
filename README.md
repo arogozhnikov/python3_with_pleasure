@@ -60,7 +60,7 @@ Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
 Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
-Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
+Previously different modules used custom ways to point [types in docstrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
 (Hint: pycharm can convert old docstrings to fresh typehinting).
 
 As a simple example, the following code may work with different types of data (that's what we like about python data stack).
