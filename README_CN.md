@@ -76,4 +76,43 @@ pycharm环境类型提示的例子：
 > Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
+Python 不再是一种小型的脚本语言，数据管道现如今包含数个级别，而每一级又涉及到不同的框架（而且有时是非常迥异的逻辑）。
+
+> Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
+Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
+(Hint: pycharm can convert old docstrings to fresh typehinting).
+
+
+
+# 结论
+
+> Python 2 and Python 3 have co-existed for almost 10 years, but we *should* move to Python 3.
+
+虽然Python 2 和 Python 3 已经共存了十年有余，但是我们*应该*过渡到Python 3 了。
+
+> Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
+
+在转向使用唯一的 Python 3 代码库之后，研究和生产的代码将会变得更剪短，更有可读性，以及明显是更加安全的。
+
+> Right now most libraries support both Python versions.
+And I can't wait for the bright moment when packages drop support for Python 2 and enjoy new language features.
+
+目前大部分类库都会支持两个Python版本，我已等不及要使用新的语言特性了，也同样期待依赖包舍弃对 Python 2 支持这一光明时刻的到来。
+
+> Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+
+以后的(版本)迁移会更加顺利：[我们再也不会做这种不向后兼容的变化了](https://snarky.ca/why-python-3-exists/)。
+
+### 相关链接
+
+- [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html)
+- [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
+- [10 awesome features of Python that you can't use because you refuse to upgrade to Python 3](http://www.asmeurer.com/python3-presentation/slides.html)
+- [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
+- [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
+
+
+### 版权声明
+
+This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
 
