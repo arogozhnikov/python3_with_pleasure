@@ -76,7 +76,7 @@ pycharm环境类型提示的例子：
 > Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
-Python 不再是一种小型的脚本语言，数据管道现如今包含数个级别，而每一级又涉及到不同的框架（而且有时是非常迥异的逻辑）。
+Python 不再是一种小型的脚本语言，数据管道现如今包含数个级别，而每一级又涉及到不同的框架（甚至有时是千差万别的逻辑）。
 
 > Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
 Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
