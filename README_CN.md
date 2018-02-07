@@ -79,8 +79,12 @@ data pipelines these days include numerous steps each involving different framew
 Python 不再是一种小型的脚本语言，数据管道现如今包含数个级别，而每一级又涉及到不同的框架（甚至有时是千差万别的逻辑）。
 
 > Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
-Previously different modules used custom ways to point [types in doctrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
-(Hint: pycharm can convert old docstrings to fresh typehinting).
+Previously different modules used custom ways to point [types in docstrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
+(Hint: pycharm can convert old docstrings to fresh type hinting).
+
+类型提示的引入是为了在程序的持续增加的复杂性方面提供帮助，这样机器可以辅助代码验证。以前不同的模块使用自定义的方式指定[文档字符中的类型](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)(提示：pycharm可以将旧的字符串转换成新的类型提示)。
+
+> As a simple example, the following code may work with different types of data (that's what we like about python data stack).
 
 
 
@@ -88,7 +92,7 @@ Previously different modules used custom ways to point [types in doctrings](http
 
 > Python 2 and Python 3 have co-existed for almost 10 years, but we *should* move to Python 3.
 
-虽然Python 2 和 Python 3 已经共存了十年有余，但是我们*应该*过渡到Python 3 了。
+虽然Python 2 和 Python 3 已经共存了十年有余，但是我们*应该*要过渡到Python 3 了。
 
 > Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
 
