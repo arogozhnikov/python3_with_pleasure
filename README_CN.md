@@ -86,6 +86,37 @@ Previously different modules used custom ways to point [types in docstrings](htt
 
 > As a simple example, the following code may work with different types of data (that's what we like about python data stack).
 
+作为一个简单的例子，下面的代码可以适用于数据的不同类型（这也是关于数据栈我们喜欢的一点）。
+
+```python
+def repeat_each_entry(data):
+    """ Each entry in the data is doubled
+    <blah blah nobody reads the documentation till the end>
+    """
+    index = numpy.repeat(numpy.arange(len(data)), 2)
+    return data[index]
+```
+
+> This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others.
+
+这段代码可适用于例如 `numpy.array` (包括多维数组)， `astropy.Table` 以及 `astropy.Column`， `bcolz`， `cupy`, `mxnet.ndarray` 和其他的。
+
+> This code will work for `pandas.Series`, but in the wrong way:
+
+这段代码虽然也适用于`pandas.Series`，但是是错误的使用方式：
+
+```python
+repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Series with Nones inside
+```
+
+> This was two lines of code. Imagine how unpredictable behavior of a complex system, because just one function may misbehave.
+Stating explicitly which types a method expects is very helpful in large systems, this will warn you if a function was passed unexpected arguments.
+
+这曾经是两行的代码。
+
+```python
+def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
+```
 
 
 # 结论
