@@ -99,7 +99,7 @@ def repeat_each_entry(data):
 
 > This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others.
 
-这段代码可适用于例如 `numpy.array` (包括多维数组)， `astropy.Table` 以及 `astropy.Column`， `bcolz`， `cupy`, `mxnet.ndarray` 和其他的。
+这段代码可适用于例如 `numpy.array` (包括多维数组)， `astropy.Table` 以及 `astropy.Column`， `bcolz`， `cupy`, `mxnet.ndarray` 和其他的组件。
 
 > This code will work for `pandas.Series`, but in the wrong way:
 
