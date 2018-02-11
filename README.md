@@ -149,12 +149,12 @@ You can also define your application-specific decorators to perform control / co
 Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization (a.k.a. ridge regression):
 
 ```python
-# l2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
+# l2-regularized linear regression: || AX - y ||^2 + alpha * ||x||^2 -> min
 
 # Python 2
-X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
+X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(y))
 # Python 3
-X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
+X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ y)
 ```
 
 The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
