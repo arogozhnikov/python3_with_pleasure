@@ -284,7 +284,7 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 ```
 
 
-## Explicit difference between 'true division' and 'integer division'
+## Explicit difference between 'true division' and 'floor division'
 
 For data science this is definitely a handy change (but not for system programming, I believe)
 
@@ -296,10 +296,20 @@ velocity = data['distance'] / data['time']
 Results in Python 2 depend on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
 In Python 3, the result is correct in both cases, because the result of division is float.
 
-Another case is integer division, which is now an explicit operation:
+Another case is floor division, which is now an explicit operation:
 
 ```python
 n_gifts = money // gift_price  # correct for int and float arguments
+```
+
+In a nutshell:
+
+```python
+>>> from operator import truediv, floordiv
+>>> truediv.__doc__, floordiv.__doc__
+('truediv(a, b) -- Same as a / b.', 'floordiv(a, b) -- Same as a // b.')
+>>> (3 / 2), (3 // 2), (3.0 // 2.0)
+(1.5, 1, 1.0)
 ```
 
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
