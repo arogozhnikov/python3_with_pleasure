@@ -183,6 +183,7 @@ A better option is to use `pathlib` in python3 (minus one import!):
 # Python 3
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
+Note: there are [minor differences](https://github.com/arogozhnikov/python3_with_pleasure/issues/16) between `glob.glob`, `Path.glob` and bash globbing.
 
 ## Print is a function now
 
