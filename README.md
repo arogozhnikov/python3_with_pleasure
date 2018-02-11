@@ -437,6 +437,8 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 ## Default pickle engine provides better compression for arrays
 
+Pickling is a mechanism to pass data between threads / processes, in particular used inside `multiprocessing` package. 
+
 ```python
 # Python 2
 import cPickle as pickle
@@ -452,8 +454,9 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 ```
 
 Three times less space. And it is *much* faster.
-Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply are not aware of it).
+Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but developers typically ignore this option (or simply are not aware of it). 
 
+Note: pickle is [not safe](https://docs.python.org/3/library/pickle.html) (and not quite transferrable), so never unpickle data received from an untrusted or unauthenticated source.
 
 ## Safer comprehensions
 
@@ -631,4 +634,3 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 ### License
 
 This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
-
