@@ -658,4 +658,6 @@ And I can't wait for the bright moment when packages drop support for Python 2 a
 
 This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
 
+Translated to Chinese by Hunter-liu (@lq920320).
+
 
