@@ -1,22 +1,30 @@
-# Migrating to Python 3 with pleasure
-## A short guide on features of Python 3 for data scientists
+# 快乐迁移Python 3
+## 为数据科学家提供的关于Python 3特性的简介
 
-Python became a mainstream language for machine learning and other scientific fields that heavily operate with data;
+> Python became a mainstream language for machine learning and other scientific fields that heavily operate with data;
 it boasts various deep learning frameworks and well-established set of tools for data processing and visualization.
 
-However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists.
+Python 已成为机器学习以及其他紧密结合数据的科学领域的主流语言；它提供了各种深度学习的框架以及一系列完善的数据处理和可视化工具。
+
+> However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists.
 By the end of 2019 the scientific stack will [stop supporting Python2](http://www.python3statement.org).
 As for numpy, after 2018 any new feature releases will only support [Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
 
-To make the transition less frustrating, I've collected a bunch of Python 3 features that you may find useful.
+然而，Python 的生态圈中 Python 2 和 Python 3 是共存状态，并且数据科学家之中是依然有使用 Python 2 的。2019年年底（Python的）科学组件将会[停止支持 Python 2 ](http://www.python3statement.org)。 至于numpy，2018年之后任何推出的新特性将会只支持[Python 3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst) 。
+
+>To make the transition less frustrating, I've collected a bunch of Python 3 features that you may find useful.
+
+为了让这一过渡更轻松一点，我整理了一些 Python 3 你可能觉得有用的特性。
 
 <img src='https://uploads.toptal.io/blog/image/92216/toptal-blog-image-1457618659472-be2f380fe3aad41333427ecd5a1ec5c5.jpg' width=400 />
 
-Image from [Dario Bertini post (toptal)](https://www.toptal.com/python/python-3-is-it-worth-the-switch)
+图片来源 [Dario Bertini post (toptal)](https://www.toptal.com/python/python-3-is-it-worth-the-switch)
 
-## Better paths handling with `pathlib`
+## `pathlib`提供了更好的路径处理
 
-`pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
+> `pathlib` is a default module in python3, that helps you to avoid tons of `os.path.join`s:
+
+`pathlib` 是Python 3 一个默认的组件，有助于避免大量使用`os.path.join`：
 
 ```python
 from pathlib import Path
@@ -32,10 +40,14 @@ for image_path in train_path.iterdir():
         # do something with an image
 ```
 
-Previously it was always tempting to use string concatenation (concise, but obviously bad),
+> Previously it was always tempting to use string concatenation (concise, but obviously bad),
 now with `pathlib` the code is safe, concise, and readable.
 
-Also `pathlib.Path` has a bunch of methods and properties, that every python novice previously had to google:
+以前，人们倾向于使用字符串连接（虽然简洁，但明显不好）；现在，代码中用`pathlib`是安全的，简洁的，并且更有可读性。
+
+> Also `pathlib.Path` has a bunch of methods and properties, that every python novice previously had to google:
+
+此外，`pathlib.Path`有大量的方法和属性，每一位 Python 早期的初学者不得不谷歌了解：
 
 ```python
 p.exists()
@@ -47,23 +59,35 @@ p.chmod(mode)
 p.rmdir()
 ```
 
-`pathlib` should save you lots of time,
+> `pathlib` should save you lots of time,
 please see [docs](https://docs.python.org/3/library/pathlib.html) and [reference](https://pymotw.com/3/pathlib/) for more.
 
+`pathlib` 应当会节省大量时间，请参看[文档](https://docs.python.org/3/library/pathlib.html)以及[指南](https://pymotw.com/3/pathlib/)了解更多。
 
-## Type hinting is now part of the language
 
-Example of type hinting in pycharm: <br/>
+## 类型提示现在已是这语言的一部分
+
+> Example of type hinting in pycharm: <br/>
+
+pycharm环境类型提示的例子：
+
 <img src='images/pycharm-type-hinting.png' />
 
-Python is not just a language for small scripts anymore,
+> Python is not just a language for small scripts anymore,
 data pipelines these days include numerous steps each involving different frameworks (and sometimes very different logic).
 
-Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
+Python 不再是一种小型的脚本语言，数据管道现如今包含数个级别，而每一级又涉及到不同的框架（甚至有时是千差万别的逻辑）。
+
+> Type hinting was introduced to help with growing complexity of programs, so machines could help with code verification.
 Previously different modules used custom ways to point [types in docstrings](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)
 (Hint: pycharm can convert old docstrings to fresh type hinting).
 
-As a simple example, the following code may work with different types of data (that's what we like about python data stack).
+类型提示的引入是为了在程序的持续增加的复杂性方面提供帮助，这样机器可以辅助代码验证。以前不同的模块使用自定义的方式指定[文档字符中的类型](https://www.jetbrains.com/help/pycharm/type-hinting-in-pycharm.html#legacy)(提示：pycharm可以将旧的字符串转换成新的类型提示)。
+
+> As a simple example, the following code may work with different types of data (that's what we like about python data stack).
+
+作为一个简单的例子，下面的代码可以适用于数据的不同类型（这也是关于数据栈我们喜欢的一点）。
+
 ```python
 def repeat_each_entry(data):
     """ Each entry in the data is doubled
@@ -73,20 +97,24 @@ def repeat_each_entry(data):
     return data[index]
 ```
 
-This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others.
+> This code e.g. works for `numpy.array` (incl. multidimensional ones), `astropy.Table` and `astropy.Column`, `bcolz`, `cupy`, `mxnet.ndarray` and others.
 
-This code will work for `pandas.Series`, but in the wrong way:
+这段代码可适用于例如 `numpy.array` (包括多维数组)， `astropy.Table` 以及 `astropy.Column`， `bcolz`， `cupy`, `mxnet.ndarray` 和其他的组件。
+
+> This code will work for `pandas.Series`, but in the wrong way:
+
+这段代码虽然也适用于`pandas.Series`，但是是错误的使用方式：
+
 ```python
 repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Series with Nones inside
 ```
 
-This was two lines of code. Imagine how unpredictable behavior of a complex system, because just one function may misbehave.
+> This was two lines of code. Imagine how unpredictable behavior of a complex system, because just one function may misbehave.
 Stating explicitly which types a method expects is very helpful in large systems, this will warn you if a function was passed unexpected arguments.
 
 ```python
 def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
 ```
-
 If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline.
 A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
@@ -149,12 +177,12 @@ You can also define your application-specific decorators to perform control / co
 Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization (a.k.a. ridge regression):
 
 ```python
-# l2-regularized linear regression: || AX - y ||^2 + alpha * ||x||^2 -> min
+# l2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
 
 # Python 2
-X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(y))
+X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
 # Python 3
-X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ y)
+X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
 The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
@@ -183,7 +211,6 @@ A better option is to use `pathlib` in python3 (minus one import!):
 # Python 3
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
-Note: there are [minor differences](https://github.com/arogozhnikov/python3_with_pleasure/issues/16) between `glob.glob`, `Path.glob` and bash globbing.
 
 ## Print is a function now
 
@@ -231,7 +258,7 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     ```
 
 
-## Underscores in Numeric Literal (Thousands Separator)
+## Underscores in Numeric Literal (Thousands Seperator)
 
 [PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
 In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number literals.
@@ -285,7 +312,7 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 ```
 
 
-## Explicit difference between 'true division' and 'floor division'
+## Explicit difference between 'true division' and 'integer division'
 
 For data science this is definitely a handy change (but not for system programming, I believe)
 
@@ -297,20 +324,10 @@ velocity = data['distance'] / data['time']
 Results in Python 2 depend on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
 In Python 3, the result is correct in both cases, because the result of division is float.
 
-Another case is floor division, which is now an explicit operation:
+Another case is integer division, which is now an explicit operation:
 
 ```python
 n_gifts = money // gift_price  # correct for int and float arguments
-```
-
-In a nutshell:
-
-```python
->>> from operator import truediv, floordiv
->>> truediv.__doc__, floordiv.__doc__
-('truediv(a, b) -- Same as a / b.', 'floordiv(a, b) -- Same as a // b.')
->>> (3 / 2), (3 // 2), (3.0 // 2.0)
-(1.5, 1, 1.0)
 ```
 
 Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
@@ -356,7 +373,7 @@ Output:
 - Python 2: `6\n��`
 - Python 3: `2\n您好`.
 
-```python
+```
 x = u'со'
 x += 'co' # ok
 x += 'со' # fail
@@ -398,7 +415,7 @@ json.loads(json.dumps(x))
 
 Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters.
 Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
-```python
+```
 from torch import nn
 
 # Python 2
@@ -437,8 +454,6 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 
 ## Default pickle engine provides better compression for arrays
 
-Pickling is a mechanism to pass data between threads / processes, in particular used inside `multiprocessing` package. 
-
 ```python
 # Python 2
 import cPickle as pickle
@@ -454,9 +469,8 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 ```
 
 Three times less space. And it is *much* faster.
-Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but developers typically ignore this option (or simply are not aware of it). 
+Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply are not aware of it).
 
-Note: pickle is [not safe](https://docs.python.org/3/library/pickle.html) (and not quite transferrable), so never unpickle data received from an untrusted or unauthenticated source.
 
 ## Safer comprehensions
 
@@ -520,8 +534,8 @@ The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any 
 ```
 
 Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
-```python
-# Python 3.5+
+```
+Python 3.5+
 do_something(**{**default_settings, **custom_settings})
 
 # Also possible, this code also checks there is no intersection between keys of dictionaries
@@ -538,7 +552,7 @@ Obviously, an author of this code didn't get the Python style of coding yet (mos
 Unfortunately, this is not just question of taste, because changing the order of arguments (adding/deleting) in `SVC` will break this code. In particular, `sklearn` does some reordering/renaming from time to time of numerous algorithm parameters to provide consistent API. Each such refactoring may drive to broken code.
 
 In Python 3, library authors may demand explicitly named parameters by using `*`:
-```python
+```
 class SVC(BaseSVC):
     def __init__(self, *, C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, ... )
 ```
@@ -567,7 +581,7 @@ Python 3 has a single type `int`, which incorporates long arithmetics.
 
 Here is how you check that value is integer:
 
-```python
+```
 isinstance(x, numbers.Integral) # Python 2, the canonical way
 isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
@@ -586,44 +600,52 @@ isinstance(x, int)              # Python 3, easier to remember
 
 ### Problems for code migration specific for data science (and how to resolve those)
 
-- support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
-  ```python
+> - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
+  ```
   map(lambda x, (y, z): x, z, dict.items())
   ```
 
-  However, it is still perfectly working with different comprehensions:
+>  However, it is still perfectly working with different comprehensions:
   ```python
   {x:z for x, (y, z) in d.items()}
   ```
-  In general, comprehensions are also better 'translatable' between Python 2 and 3.
+>  In general, comprehensions are also better 'translatable' between Python 2 and 3.
 
-- `map()`, `.keys()`, `.values()`, `.items()`, etc. return iterators, not lists. Main problems with iterators are:
-  - no trivial slicing
-  - can't be iterated twice
+> - `map()`, `.keys()`, `.values()`, `.items()`, etc. return iterators, not lists. Main problems with iterators are:
+   - no trivial slicing
+   - can't be iterated twice
 
-  Almost all of the problems are resolved by converting result to list.
+>  Almost all of the problems are resolved by converting result to list.
 
-- see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble
+> - see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble
 
 ### Main problems for teaching machine learning and data science with python
 
-Course authors should spend time in the first lectures to explain what is an iterator,
+> Course authors should spend time in the first lectures to explain what is an iterator,
 why it can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
 
-I think most course authors would be happy to avoid these details, but now it is hardly possible.
+> I think most course authors would be happy to avoid these details, but now it is hardly possible.
 
-# Conclusion
+# 结论
 
-Python 2 and Python 3 have co-existed for almost 10 years, but we *should* move to Python 3.
+> Python 2 and Python 3 have co-existed for almost 10 years, but we *should* move to Python 3.
 
-Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
+虽然Python 2 和 Python 3 已经共存了十年有余，但是我们*应该*要过渡到Python 3 了。
 
-Right now most libraries support both Python versions.
+> Research and production code should become a bit shorter, more readable, and significantly safer after moving to Python 3-only codebase.
+
+在转向使用唯一的 Python 3 代码库之后，研究和生产的代码将会变得更剪短，更有可读性，以及明显是更加安全的。
+
+> Right now most libraries support both Python versions.
 And I can't wait for the bright moment when packages drop support for Python 2 and enjoy new language features.
 
-Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+目前大部分类库都会支持两个Python版本，我已等不及要使用新的语言特性了，也同样期待依赖包舍弃对 Python 2 支持这一光明时刻的到来。
 
-### Links
+> Following migrations are promised to be smoother: ["we will never do this kind of backwards-incompatible change again"](https://snarky.ca/why-python-3-exists/)
+
+以后的(版本)迁移会更加顺利：[我们再也不会做这种不向后兼容的变化了](https://snarky.ca/why-python-3-exists/)。
+
+### 相关链接
 
 - [Key differences between Python 2.7 and Python 3.x](http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html)
 - [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)
@@ -631,6 +653,11 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 - [Trust me, python 3.3 is better than 2.7 (video)](http://pyvideo.org/pycon-us-2013/python-33-trust-me-its-better-than-27.html)
 - [Python 3 for scientists](http://python-3-for-scientists.readthedocs.io/en/latest/)
 
-### License
+
+### 版权声明
 
 This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
+
+Translated to Chinese by Hunter-liu (@lq920320).
+
+
