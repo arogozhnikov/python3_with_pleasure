@@ -260,6 +260,7 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     ```
 > - hacky suppressing / redirection of printing output:
 - 结束/重定向打印输出
+
     ```python
     # Python 3
     _print = print # store the original print function
