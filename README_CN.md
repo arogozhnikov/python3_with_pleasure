@@ -272,7 +272,8 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 
     > Below you can see a context manager that temporarily overrides behavior of print:
     
-    下面你可以看到暂时覆盖打印行为的上下文管理器：
+    下面你可以看到暂时覆盖打印行为的上下文管理器：       
+    
     ```python
     @contextlib.contextmanager
     def replace_print():
