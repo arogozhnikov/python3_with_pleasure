@@ -245,12 +245,14 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 
 > - simple syntax for using file descriptor:
 - 使用文件描述符的简单语法:
+
     ```python
     print >>sys.stderr, "critical error"      # Python 2
     print("critical error", file=sys.stderr)  # Python 3
     ```
 > - printing tab-aligned tables without `str.join`:
 - 不使用`str.join`打印制表符对齐表：
+
     ```python
     # Python 3
     print(*array, sep='\t')
@@ -271,6 +273,7 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     > Below you can see a context manager that temporarily overrides behavior of print:
     
     下面你可以看到暂时覆盖打印行为的上下文管理器：
+    
     ```python
     @contextlib.contextmanager
     def replace_print():
@@ -289,6 +292,7 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     这*并不是*推荐的方法，现在却可能是一次小小的黑客攻击。
 > - `print` can participate in list comprehensions and other language constructs
 - `print`可以参与列表理解和其他语言结构:
+
     ```python
     # Python 3
     result = process(x) if is_valid(x) else print('invalid item: ', x)
