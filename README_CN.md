@@ -189,9 +189,11 @@ frequency(speed=300_000 * u.km / u.s, wavelength=555 * u.nm)
 
 你也可以自定义专用的装饰器，以相同的方式执行输入和输出的控制/转换。
 
-## Matrix multiplication with @
+## 矩阵乘号 @ 
 
-Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization (a.k.a. ridge regression):
+> Let's implement one of the simplest ML models &mdash; a linear regression with l2 regularization (a.k.a. ridge regression):
+
+让我们来实现一个最简单的 ML(机器学习) 模型 &mdash; 具有 l2 正则化的线性回归（又名岭回归）：
 
 ```python
 # l2-regularized linear regression: || AX - b ||^2 + alpha * ||x||^2 -> min
@@ -202,11 +204,15 @@ X = np.linalg.inv(np.dot(A.T, A) + alpha * np.eye(A.shape[1])).dot(A.T.dot(b))
 X = np.linalg.inv(A.T @ A + alpha * np.eye(A.shape[1])) @ (A.T @ b)
 ```
 
-The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
+> The code with `@` becomes more readable and more translatable between deep learning frameworks: same code `X @ W + b[None, :]` for a single layer of perceptron works in `numpy`, `cupy`, `pytorch`, `tensorflow` (and other frameworks that operate with tensors).
 
-## Globbing with `**`
+使用`@`的代码在深度学习框架之间变得更有可读性和可转换性：对于单层感知器，相同的代码`X @ W + b[None, :]` 可运行与`numpy`、 `cupy`、 `pytorch`、 `tensorflow`（以及其他基于张量运行的框架）。
 
-Recursive folder globbing is not easy in Python 2, even though the [glob2](https://github.com/miracle2k/python-glob2) custom module exists that overcomes this. A recursive flag is supported since Python 3.5:
+## 通配符 `**`
+
+> Recursive folder globbing is not easy in Python 2, even though the [glob2](https://github.com/miracle2k/python-glob2) custom module exists that overcomes this. A recursive flag is supported since Python 3.5:
+
+即使[glob2](https://github.com/miracle2k/python-glob2)的自定义模块克服了这一点，但是在Python 2中递归的文件夹通配依旧不容易。自Python3.5以来便支持了递归标志：
 
 ```python
 import glob
@@ -223,38 +229,49 @@ found_images = \
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
 ```
 
-A better option is to use `pathlib` in python3 (minus one import!):
+> A better option is to use `pathlib` in python3 (minus one import!):
+
+一个更好的选项就是在Python 3中使用`pathlib`(减少了一个导入！)：
 ```python
 # Python 3
 found_images = pathlib.Path('/path/').glob('**/*.jpg')
 ```
 
-## Print is a function now
+## Print 现在成了一个方法
 
-Yes, code now has these annoying parentheses, but there are some advantages:
+> Yes, code now has these annoying parentheses, but there are some advantages:
 
-- simple syntax for using file descriptor:
+是的，代码现在有了这些烦人的括号，但也是有一些好处的：
+
+> - simple syntax for using file descriptor:
+- 使用文件描述符的简单语法:
     ```python
     print >>sys.stderr, "critical error"      # Python 2
     print("critical error", file=sys.stderr)  # Python 3
     ```
-- printing tab-aligned tables without `str.join`:
-    ```python
+> - printing tab-aligned tables without `str.join`:
+- 不使用`str.join`打印制表符对齐表：
+    ```python
     # Python 3
     print(*array, sep='\t')
     print(batch, epoch, loss, accuracy, time, sep='\t')
     ```
-- hacky suppressing / redirection of printing output:
-    ```python
+> - hacky suppressing / redirection of printing output:
+- 结束/重定向打印输出
+    ```python
     # Python 3
     _print = print # store the original print function
     def print(*args, **kargs):
         pass  # do something useful, e.g. store output to some file
     ```
-    In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
+    > In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
+    
+    在jupyter中，最好将每个输出记录到一个单独的文件中（以便跟踪断开连接后发生的情况），以便你现在可以重写`print`。
 
-    Below you can see a context manager that temporarily overrides behavior of print:
-    ```python
+    > Below you can see a context manager that temporarily overrides behavior of print:
+    
+    下面你可以看到暂时覆盖打印行为的上下文管理器：
+    ```python
     @contextlib.contextmanager
     def replace_print():
         import builtins
@@ -267,15 +284,18 @@ Yes, code now has these annoying parentheses, but there are some advantages:
     with replace_print():
         <code here will invoke other print function>
     ```
-    It is *not* a recommended approach, but a small dirty hack that is now possible.
-- `print` can participate in list comprehensions and other language constructs
+    > It is *not* a recommended approach, but a small dirty hack that is now possible.
+    
+    这*并不是*推荐的方法，现在却可能是一次小小的黑客攻击。
+> - `print` can participate in list comprehensions and other language constructs
+- `print`可以参与列表理解和其他语言结构:
     ```python
     # Python 3
     result = process(x) if is_valid(x) else print('invalid item: ', x)
     ```
 
 
-## Underscores in Numeric Literal (Thousands Seperator)
+## 数字中的下划线 （千位分隔符）
 
 [PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
 In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number literals.
