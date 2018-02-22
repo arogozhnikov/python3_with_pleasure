@@ -253,15 +253,14 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 > - printing tab-aligned tables without `str.join`:
 - 不使用`str.join`打印制表符对齐表：
 
-    ```python
+    ```python
     # Python 3
     print(*array, sep='\t')
     print(batch, epoch, loss, accuracy, time, sep='\t')
     ```
 > - hacky suppressing / redirection of printing output:
 - 结束/重定向打印输出
-
-    ```python
+   ```python
     # Python 3
     _print = print # store the original print function
     def print(*args, **kargs):
@@ -274,8 +273,7 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     > Below you can see a context manager that temporarily overrides behavior of print:
     
     下面你可以看到暂时覆盖打印行为的上下文管理器：
-
-    ```python
+    ```python
     @contextlib.contextmanager
     def replace_print():
         import builtins
