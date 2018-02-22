@@ -112,20 +112,29 @@ repeat_each_entry(pandas.Series(data=[0, 1, 2], index=[3, 4, 5])) # returns Seri
 > This was two lines of code. Imagine how unpredictable behavior of a complex system, because just one function may misbehave.
 Stating explicitly which types a method expects is very helpful in large systems, this will warn you if a function was passed unexpected arguments.
 
+这曾经是两行代码。想象一下一个复杂系统不可预知的行为，仅仅是因为一个功能可能会失败。在大型的系统中，明确地指出方法期望的类型是非常有帮助的。如果一个方法通过了意外参数，则会给出警告。
+
 ```python
 def repeat_each_entry(data: Union[numpy.ndarray, bcolz.carray]):
 ```
-If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline.
-A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
+> If you have a significant codebase, hinting tools like [MyPy](http://mypy.readthedocs.io) are likely to become part of your continuous integration pipeline.A webinar ["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g) by Daniel Pyrathon is good for a brief introduction.
 
-Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
+如果你有一个重要的代码仓库，比如[MyPy](http://mypy.readthedocs.io)的提示工具有可能成为你持续集成管道的一部分。Daniel Pyrathon主持的["Putting Type Hints to Work"](https://www.youtube.com/watch?v=JqBCFfiE11g)研讨会，给出了一个很好的简介。
 
-## Type hinting → type checking in runtime
+> Sidenote: unfortunately, hinting is not yet powerful enough to provide fine-grained typing for ndarrays/tensors, but [maybe we'll have it once](https://github.com/numpy/numpy/issues/7370), and this will be a great feature for DS.
 
-By default, function annotations do not influence how your code is working, but merely help you to point code intentions.
+边注：不幸的是，提示信息还不够强大为多维数组/张量提供精细的提示。但是[也许我们会有](https://github.com/numpy/numpy/issues/7370)，并且这将是DS的一个强大功能。
 
-However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce),
+## 类型提示 → 在运行时检查类型
+
+> By default, function annotations do not influence how your code is working, but merely help you to point code intentions.
+
+默认情况下，方法声明不会影响你运行中的代码，而只是帮助你指出代码的意图。
+
+> However, you can enforce type checking in runtime with tools like ... [enforce](https://github.com/RussBaz/enforce),
 this can help you in debugging (there are many cases when type hinting is not working).
+
+然而，你可以利用工具，比如[enforce](https://github.com/RussBaz/enforce)，在代码运行时执行类型检查，这对你在debug代码时是很有帮助的（类型提示不起作用的情况也很多）。
 
 ```python
 @enforce.runtime_validation
@@ -151,12 +160,16 @@ any2([False, None, "", 0]) # fails
 
 ```
 
-## Other usages of function annotations
+## 方法声明的其他用途
 
-As mentioned before, annotations do not influence code execution, but rather provide some meta-information,
+> As mentioned before, annotations do not influence code execution, but rather provide some meta-information,
 and you can use it as you wish.
 
-For instance, measurement units are a common pain in scientific areas, `astropy` package [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units
+正如之前提到的，声明不会影响代码执行，而只是提供一些元信息，此外你也可以随意使用。
+
+> For instance, measurement units are a common pain in scientific areas, `astropy` package [provides a simple decorator](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities) to control units of input quantities and convert output to required units.
+
+比如，测量单位是科学领域常见的痛点，`astropy`包[提供了一个简单的装饰器](http://docs.astropy.org/en/stable/units/quantity.html#functions-that-accept-quantities)用来控制输入数量的单位及转换输出部分所需的单位。
 ```python
 # Python 3
 from astropy import units as u
@@ -168,9 +181,13 @@ frequency(speed=300_000 * u.km / u.s, wavelength=555 * u.nm)
 # output: 540.5405405405404 THz, frequency of green visible light
 ```
 
-If you're processing tabular scientific data in python (not necessarily astronomical), you should give `astropy` a shot.
+> If you're processing tabular scientific data in python (not necessarily astronomical), you should give `astropy` a shot.
 
-You can also define your application-specific decorators to perform control / conversion of inputs and output in the same manner.
+如果你正在用Python处理表格式的科学数据（没必要是天文数字），那么你应该试试`astropy`。
+
+> You can also define your application-specific decorators to perform control / conversion of inputs and output in the same manner.
+
+你也可以自定义专用的装饰器，以相同的方式执行输入和输出的控制/转换。
 
 ## Matrix multiplication with @
 
