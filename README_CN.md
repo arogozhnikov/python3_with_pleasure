@@ -266,14 +266,14 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     def print(*args, **kargs):
         pass  # do something useful, e.g. store output to some file
     ```
-    > In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
+> In jupyter it is desirable to log each output to a separate file (to track what's happening after you got disconnected), so you can override `print` now.
     
-    在jupyter中，最好将每个输出记录到一个单独的文件中（以便跟踪断开连接后发生的情况），以便你现在可以重写`print`。
+在jupyter中，最好将每个输出记录到一个单独的文件中（以便跟踪断开连接后发生的情况），以便你现在可以重写 `print` 。
 
-    > Below you can see a context manager that temporarily overrides behavior of print:
-    
-    下面你可以看到暂时覆盖打印行为的上下文管理器：       
-    
+> Below you can see a context manager that temporarily overrides behavior of print:          
+
+下面你可以看到暂时覆盖打印行为的上下文管理器：
+
     ```python
     @contextlib.contextmanager
     def replace_print():
@@ -287,11 +287,11 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
     with replace_print():
         <code here will invoke other print function>
     ```
-    > It is *not* a recommended approach, but a small dirty hack that is now possible.
+> It is *not* a recommended approach, but a small dirty hack that is now possible.
     
-    这*并不是*推荐的方法，现在却可能是一次小小的黑客攻击。
+这*并不是*推荐的方法，现在却可能是一次小小的黑客攻击。
 > - `print` can participate in list comprehensions and other language constructs
-- `print`可以参与列表理解和其他语言结构:
+- `print` 可以参与理解列表和其他语言结构:
 
     ```python
     # Python 3
