@@ -300,8 +300,10 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 
 ## 数字中的下划线 （千位分隔符）
 
-[PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
+> [PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515") introduced underscores in Numeric Literals.
 In Python3, underscores can be used to group digits visually in integral, floating-point, and complex number literals.
+
+[PEP-515](https://www.python.org/dev/peps/pep-0515/ "PEP-515")在数字中引入了下划线。在Python 3 中，下划线可以用于在整数，浮点数，以及一些复杂的数字中以可视的方式对数字分组。
 
 ```python
 # grouping decimal numbers by thousands
@@ -317,13 +319,17 @@ flags = 0b_0011_1111_0100_1110
 flags = int('0b_1111_0000', 2)
 ```
 
-## f-strings for simple and reliable formatting
+## 用于简单可靠格式化的 f-strings
 
-The default formatting system provides a flexibility that is not required in data experiments.
+> The default formatting system provides a flexibility that is not required in data experiments.
 The resulting code is either too verbose or too fragile towards any changes.
 
-Quite typically data scientists outputs some logging information iteratively in a fixed format.
+默认的格式化系统提供了数据实验中不必要的灵活性。由此产生的代码对于任何更改都显得过于冗长或者脆弱。
+
+> Quite typically data scientists outputs some logging information iteratively in a fixed format.
 It is common to have a code like:
+
+通常数据科学家会以固定的格式反复输出一些记录信息。如下代码就是常见的一段：
 
 ```python
 # Python 2
@@ -340,40 +346,49 @@ print('{:3} {:3} / {:3}  accuracy: {:0.4f}±{:0.4f} time: {:3.2f}'.format(
 ))
 ```
 
-Sample output:
+简单输出:
 ```
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
 **f-strings** aka formatted string literals were introduced in Python 3.6:
+
+**f-string** 又名格式化的字符串，在Python 3.6 中引入：
 ```python
 # Python 3.6+
 print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies):0.4f}±{numpy.std(accuracies):0.4f} time: {time / len(data_batch):3.2f}')
 ```
 
 
-## Explicit difference between 'true division' and 'integer division'
+## “真正的除法”与“整数除法”之间的明显区别
 
-For data science this is definitely a handy change (but not for system programming, I believe)
+> For data science this is definitely a handy change (but not for system programming, I believe).
+
+对于数据科学来说，这绝对是一个便利的改变（但我觉得对于编程系统就没那么方便了）。
 
 ```python
 data = pandas.read_csv('timing.csv')
 velocity = data['distance'] / data['time']
 ```
 
-Results in Python 2 depend on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
+> Results in Python 2 depend on whether 'time' and 'distance' (e.g. measured in meters and seconds) are stored as integers.
 In Python 3, the result is correct in both cases, because the result of division is float.
 
-Another case is integer division, which is now an explicit operation:
+Python 2 中的计算结果取决于“时间”和“距离”（例如，分别以米和秒计量）是否存储为整数，而在Python 3 中，结果在两种情况下都是正确的，因为除法的计算结果是浮点型了。
+
+> Another case is integer division, which is now an explicit operation:
+
+另一种情况是整数除法，它现在是一种精确的运算了：
 
 ```python
 n_gifts = money // gift_price  # correct for int and float arguments
 ```
 
-Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
+> Note, that this applies both to built-in types and to custom types provided by data packages (e.g. `numpy` or `pandas`).
 
+注意，这都适用于内置类型及数据包提供的自定义类型（如`numpy` 或者 `pandas`）。
 
-## Strict ordering
+## 严谨的排序
 
 ```python
 # All these comparisons are illegal in Python 3
@@ -386,13 +401,17 @@ Note, that this applies both to built-in types and to custom types provided by d
 (4, 5) == [4, 5]
 ```
 
-- prevents from occasional sorting of instances of different types
+> - prevents from occasional sorting of instances of different types
+- 防止偶尔对不同类型的实例进行排序
   ```python
   sorted([2, '1', 3])  # invalid for Python 3, in Python 2 returns [2, 3, '1']
   ```
-- helps to spot some problems that arise when processing raw data
+> - helps to spot some problems that arise when processing raw data
+- 有助于发现在处理原始数据时的一些问题
 
-Sidenote: proper check for None is (in both Python versions)
+> Sidenote: proper check for None is (in both Python versions)
+
+边注：合理检查None的情况（Python两个版本中都有）
 ```python
 if a is not None:
   pass
@@ -402,14 +421,15 @@ if a: # WRONG check for None
 ```
 
 
-## Unicode for NLP
+## 用于NLP的Unicode 
+*译者注：NLP，神经语言程序学 (Neuro-Linguistic Programming) *
 
 ```python
 s = '您好'
 print(len(s))
 print(s[:2])
 ```
-Output:
+输出:
 - Python 2: `6\n��`
 - Python 3: `2\n您好`.
 
@@ -418,11 +438,17 @@ x = u'со'
 x += 'co' # ok
 x += 'со' # fail
 ```
-Python 2 fails, Python 3 works as expected (because I've used russian letters in strings).
+> Python 2 fails, Python 3 works as expected (because I've used russian letters in strings).
 
-In Python 3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
+Python 2 失败了，Python 3 如预期运行（因为我在字符串中使用了俄语的文字）。
 
-There are other funny things, for instance:
+> In Python 3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
+
+在Python 3 中，`str`s是unicode字符串，对于非英文文本的NLP处理更为方便。
+
+> There are other funny things, for instance:
+
+这还有一些其他有趣的事情，比如：
 ```python
 'a' < type < u'a'  # Python 2: True
 'a' < u'a'         # Python 2: False
@@ -436,9 +462,11 @@ Counter('Möbelstück')
 - Python 2: `Counter({'\xc3': 2, 'b': 1, 'e': 1, 'c': 1, 'k': 1, 'M': 1, 'l': 1, 's': 1, 't': 1, '\xb6': 1, '\xbc': 1})`
 - Python 3: `Counter({'M': 1, 'ö': 1, 'b': 1, 'e': 1, 'l': 1, 's': 1, 't': 1, 'ü': 1, 'c': 1, 'k': 1})`
 
-You can handle all of this in Python 2 properly, but Python 3 is more friendly.
+> You can handle all of this in Python 2 properly, but Python 3 is more friendly.
 
-## Preserving order of dictionaries and **kwargs
+虽然你可以用Python 2正确地处理所有这些情况，但Python 3显得更加友好。
+
+## 保留字典和** kwargs的顺序
 
 In CPython 3.6+ dicts behave like `OrderedDict` by default (and [this is guaranteed in Python 3.7+](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)).
 This preserves order during dict comprehensions (and other operations, e.g. during json serialization/deserialization)
