@@ -422,6 +422,7 @@ if a: # WRONG check for None
 
 
 ## 用于NLP的Unicode 
+
 *译者注：NLP，神经语言程序学 (Neuro-Linguistic Programming) *
 
 ```python
@@ -444,7 +445,7 @@ Python 2 失败了，Python 3 如预期运行（因为我在字符串中使用�
 
 > In Python 3 `str`s are unicode strings, and it is more convenient for NLP processing of non-english texts.
 
-在Python 3 中，`str`s是unicode字符串，对于非英文文本的NLP处理更为方便。
+在Python 3 中，`str`是unicode字符串，对于非英文文本的NLP处理更为方便。
 
 > There are other funny things, for instance:
 
