@@ -287,7 +287,7 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 
 ## Explicit difference between 'true division' and 'floor division'
 
-For data science this is definitely a handy change (but not for system programming, I believe)
+For data science this is definitely a handy change 
 
 ```python
 data = pandas.read_csv('timing.csv')
