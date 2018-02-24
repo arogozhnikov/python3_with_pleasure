@@ -351,7 +351,7 @@ print('{:3} {:3} / {:3}  accuracy: {:0.4f}±{:0.4f} time: {:3.2f}'.format(
 120  12 / 300  accuracy: 0.8180±0.4649 time: 56.60
 ```
 
-**f-strings** aka formatted string literals were introduced in Python 3.6:
+> **f-strings** aka formatted string literals were introduced in Python 3.6:
 
 **f-string** 又名格式化的字符串，在Python 3.6 中引入：
 ```python
