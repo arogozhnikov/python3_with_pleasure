@@ -469,9 +469,10 @@ Counter('Möbelstück')
 
 ## 保留字典和** kwargs的顺序
 
-In CPython 3.6+ dicts behave like `OrderedDict` by default (and [this is guaranteed in Python 3.7+](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)).
+> In CPython 3.6+ dicts behave like `OrderedDict` by default (and [this is guaranteed in Python 3.7+](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)).
 This preserves order during dict comprehensions (and other operations, e.g. during json serialization/deserialization)
 
+在CPython 3.6+中，字典的默认行为与`OrderedDict`类似（并且[这在Python 3.7+ 中也得到了保证]((https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6))）。这在字典释义时提供了顺序（以及其他操作执行时，比如json序列化/反序列化）。
 ```python
 import json
 x = {str(i):i for i in range(5)}
@@ -482,8 +483,10 @@ json.loads(json.dumps(x))
 {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4}
 ```
 
-Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters.
+> Same applies to `**kwargs` (in Python 3.6+), they're kept in the same order as they appear in parameters.
 Order is crucial when it comes to data pipelines, previously we had to write it in a cumbersome manner:
+
+同样适用于`** kwargs`（Python 3.6+），它们保持与它们在参数中出现的顺序相同。在数据管道方面，顺序至关重要，以前我们必须以繁琐的方式来编写：
 ```
 from torch import nn
 
@@ -504,10 +507,12 @@ model = nn.Sequential(
 )
 ```
 
-Did you notice? Uniqueness of names is also checked automatically.
+> Did you notice? Uniqueness of names is also checked automatically.
+
+你注意到了吗？命名的唯一性也会自动检查。
 
 
-## Iterable unpacking
+## 可迭代对象的（Iterable）解压
 
 ```python
 # handy when amount of additional stored info may vary between experiments, but the same code can be used in all cases
@@ -521,7 +526,7 @@ model_paramteres, optimizer_parameters, *other_params = load(checkpoint_name)
 *prev, next_to_last, last = iter_train(args)
 ```
 
-## Default pickle engine provides better compression for arrays
+## 默认的pickle引擎为数组提供更好的压缩
 
 ```python
 # Python 2
@@ -537,11 +542,13 @@ len(pickle.dumps(numpy.random.normal(size=[1000, 1000])))
 # result: 8000162
 ```
 
-Three times less space. And it is *much* faster.
+> Three times less space. And it is *much* faster.
 Actually similar compression (but not speed) is achievable with `protocol=2` parameter, but users typically ignore this option (or simply are not aware of it).
 
+1/3的空间，以及*更加*快的速度。事实上，使用`protocol = 2`参数可以实现类似的压缩（速度则大相径庭），但用户通常会忽略此选项（或者根本不知道它）。
 
-## Safer comprehensions
+
+## 更安全的压缩
 
 ```python
 labels = <initial_value>
@@ -551,9 +558,11 @@ predictions = [model.predict(data) for data, labels in dataset]
 # labels are not affected by comprehension in Python 3
 ```
 
-## Super, simply super()
+## 超简单的super()函数
 
-Python 2 `super(...)` was a frequent source of mistakes in code.
+> Python 2 `super(...)` was a frequent source of mistakes in code.
+
+Python 2 中的`super(...)`曾是代码中最常见的错误源头。
 
 ```python
 # Python 2
@@ -567,24 +576,36 @@ class MySubClass(MySuperClass):
         super().__init__(name='subclass', **options)
 ```
 
-More on `super` and method resolution order on [stackoverflow](https://stackoverflow.com/questions/576169/understanding-python-super-with-init-methods).
+> More on `super` and method resolution order on [stackoverflow](https://stackoverflow.com/questions/576169/understanding-python-super-with-init-methods).
 
-## Better IDE suggestions with variable annotations
+[stackoverflow](https://stackoverflow.com/questions/576169/understanding-python-super-with-init-methods)上有更多关于`super`和方法解决的信息。
 
-The most enjoyable thing about programming in languages like Java, C# and alike is that IDE can make very good suggestions,
+## 有着变量注释的更好的IDE建议
+
+> The most enjoyable thing about programming in languages like Java, C# and alike is that IDE can make very good suggestions,
 because type of each identifier is known before executing a program.
 
-In python this is hard to achieve, but annotations will help you
-- write your expectations in a clear form
-- and get good suggestions from IDE
+关于Java，C＃等语言编程最令人享受的事情是IDE可以提出非常好的建议，因为每个标识符的类型在执行程序之前是已知的。
+
+> In python this is hard to achieve, but annotations will help you
+> - write your expectations in a clear form
+> - and get good suggestions from IDE
+
+Python中这很难实现，但注释是会帮助你的
+- 以清晰的形式写下你的期望
+- 并从IDE获得很好的建议
 
 <img src='images/variable_annotations.png' /><br />
-This is an example of PyCharm suggestions with variable annotations.
+> This is an example of PyCharm suggestions with variable annotations.
 This works even in situations when functions you use are not annotated (e.g. due to backward compatibility).
 
-## Multiple unpacking
+这是PyCharm带有变量声明建议的一个例子。即使在你使用的功能未被注释过的情况依旧是有效的（例如，向后的兼容性）。
 
-Here is how you merge two dicts now:
+## 更多的解包（unpacking）
+
+> Here is how you merge two dicts now:
+
+现在展示如何合并两个字典：
 ```python
 x = dict(a=1, b=2)
 y = dict(b=3, d=4)
@@ -593,16 +614,22 @@ z = {**x, **y}
 # z = {'a': 1, 'b': 3, 'd': 4}, note that value for `b` is taken from the latter dict.
 ```
 
-See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for a comparison with Python 2.
+> See [this thread at StackOverflow](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression) for a comparison with Python 2.
 
-The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
+请参照[在StackOverflow上的这一过程](https://stackoverflow.com/questions/38987/how-to-merge-two-dictionaries-in-a-single-expression)，与Python 2进行比较。
+
+> The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any iterables):
+
+同样的方法对于列表，元组，以及集合（`a`, `b`, `c` 是可任意迭代的）：
 ```python
 [*a, *b, *c] # list, concatenating
 (*a, *b, *c) # tuple, concatenating
 {*a, *b, *c} # set, union
 ```
 
-Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
+> Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
+
+函数对于参数`*args`和`**kwargs`同样[支持](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448)
 ```
 Python 3.5+
 do_something(**{**default_settings, **custom_settings})
@@ -611,23 +638,30 @@ do_something(**{**default_settings, **custom_settings})
 do_something(**first_args, **second_args)
 ```
 
-## Future-proof APIs with keyword-only arguments
+## 具有关键字参数的面向未来的API
 
-Let's consider this snippet
+让我们看一下这个代码片段：
 ```python
 model = sklearn.svm.SVC(2, 'poly', 2, 4, 0.5)
 ```
-Obviously, an author of this code didn't get the Python style of coding yet (most probably, just jumped from cpp or rust).
+> Obviously, an author of this code didn't get the Python style of coding yet (most probably, just jumped from cpp or rust).
 Unfortunately, this is not just question of taste, because changing the order of arguments (adding/deleting) in `SVC` will break this code. In particular, `sklearn` does some reordering/renaming from time to time of numerous algorithm parameters to provide consistent API. Each such refactoring may drive to broken code.
 
-In Python 3, library authors may demand explicitly named parameters by using `*`:
+很明显，代码的作者还未理解Python的编码风格（很有可能是从cpp或者rust转到Python的）。
+不幸的是，这不仅仅是品味的问题，因为在`SVC`中改变参数顺序（添加/删除）都会破坏代码。 特别是，`sklearn`会不时地对许多算法参数进行重新排序/重命名以提供一致的API。 每个这样的重构都可能导致代码损坏。
+
+> In Python 3, library authors may demand explicitly named parameters by using `*`:
+
+在Python 3中，类库作者可能会通过使用`*`来要求明确命名的参数：
 ```
 class SVC(BaseSVC):
     def __init__(self, *, C=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, ... )
 ```
-- users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
-- this mechanism provides a great combination of reliability and flexibility of APIs
+> - users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
+> - this mechanism provides a great combination of reliability and flexibility of APIs
 
+- 用户现在必须指定参数名称为`sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)`
+- 这种机制提供了API完美结合的可靠性和灵活性
 
 ## Minor: constants in `math` module
 
@@ -644,7 +678,7 @@ for model in trained_models:
 
 ## Minor: single integer type
 
-Python 2 provides two basic integer types, which are `int` (64-bit signed integer) and `long` for long arithmetics (quite confusing after C++).
+Python 2 provides two basic integer types, which are int (64-bit signed integer) and long for long arithmetics (quite confusing after C++).
 
 Python 3 has a single type `int`, which incorporates long arithmetics.
 
