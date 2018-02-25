@@ -550,7 +550,7 @@ class SVC(BaseSVC):
 
 ```python
 # Python 3
-math.inf # 'largest' number
+math.inf # Infinite float
 math.nan # not a number
 
 max_quality = -math.inf  # no more magic initial values!
