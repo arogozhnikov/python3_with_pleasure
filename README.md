@@ -352,8 +352,8 @@ s = '您好'
 print(len(s))
 print(s[:2])
 ```
-Output:
-- Python 2: `6\n��`
+Output (the exact output may vary depending on the terminal encoding):
+- Python 2: `6\n��`
 - Python 3: `2\n您好`.
 
 ```python
