@@ -739,7 +739,7 @@ isinstance(x, int)              # Python 3, easier to remember
    - can't be iterated twice
 
 - `map()`， `.keys()`， `.values()`， `.items()`等等返回的是迭代器（iterators），而不是列表（lists）。迭代器的主要问题如下：
-   - 没有细小的切片
+   - 没有细小的切片
    - 不能迭代两次
 
 >  Almost all of the problems are resolved by converting result to list.
