@@ -362,9 +362,9 @@ print(f'{batch:3} {epoch:3} / {total_epochs:3}  accuracy: {numpy.mean(accuracies
 
 ## “真正的除法”与“整数除法”之间的明显区别
 
-> For data science this is definitely a handy change (but not for system programming, I believe).
+> For data science this is definitely a handy change.
 
-对于数据科学来说，这绝对是一个便利的改变（但我觉得对于编程系统就没那么方便了）。
+对于数据科学来说，这绝对是一个便利的改变。
 
 ```python
 data = pandas.read_csv('timing.csv')
@@ -663,7 +663,7 @@ class SVC(BaseSVC):
 - 用户现在必须指定参数名称为`sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)`
 - 这种机制提供了API完美结合的可靠性和灵活性
 
-## Minor: constants in `math` module
+## 次要: `math`模块中的常量
 
 ```python
 # Python 3
@@ -676,13 +676,19 @@ for model in trained_models:
     max_quality = max(max_quality, compute_quality(model, data))
 ```
 
-## Minor: single integer type
+## 次要: 单一的整数类型
 
-Python 2 provides two basic integer types, which are int (64-bit signed integer) and long for long arithmetics (quite confusing after C++).
+> Python 2 provides two basic integer types, which are int (64-bit signed integer) and long for long arithmetics (quite confusing after C++).
 
-Python 3 has a single type `int`, which incorporates long arithmetics.
+Python 2提供了两种基础的整数类型，int(64位有符号的整数)以及对于长整型计算的long（在C++之后就变得非常混乱）。
 
-Here is how you check that value is integer:
+> Python 3 has a single type `int`, which incorporates long arithmetics.
+
+Python 3有着单一的类型`int`，其同时融合了长整型的计算。
+
+> Here is how you check that value is integer:
+
+如下为如何检查该值是整数：
 
 ```
 isinstance(x, numbers.Integral) # Python 2, the canonical way
@@ -690,7 +696,7 @@ isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
 ```
 
-## Other stuff
+## 其他事项
 
 - `Enum`s are theoretically useful, but
     - string-typing is already widely adopted in the python data stack
@@ -700,34 +706,61 @@ isinstance(x, int)              # Python 3, easier to remember
 - Python 3 supports unicode identifies (so `ω = Δφ / Δt` is ok), but you'd [better use good old ASCII names](https://stackoverflow.com/a/29855176/498892)
 - some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, so features that sound useless for you are useful for libraries you'll probably want to use once.
 
+- `Enum`（枚举类）理论上是有用的，但是
+   - string-typing 已经在Python数据栈中被广泛采用
+   - `Enum`似乎不会与numpy和pandas的分类相互作用
+- 协程（coroutines）*听起来*也非常适用于数据管道（参见David Beazley的[幻灯片](http://www.dabeaz.com/coroutines/Coroutines.pdf)），但是我从来没见过代码引用它们。
+- Python 3 有着[稳定的ABI](https://www.python.org/dev/peps/pep-0384/)
 
-### Problems for code migration specific for data science (and how to resolve those)
+  *ABI（Application Binary Interface）: 应用程序二进制接口 描述了应用程序和操作系统之间，一个应用和它的库之间，或者应用的组成部分之间的低接口。*
+- Python 3支持unicode标识（甚至`ω=Δφ/Δt`也可以），但是你[最好使用好的旧ASCII名称](https://stackoverflow.com/a/29855176/498892)。
+- 一些类库例如 [jupyterhub](https://github.com/jupyterhub/jupyterhub)（云端的jupyter），django和最新的ipython仅支持Python 3，因此对于您来说听起来无用的功能，对于您可能想要使用的库却很有用。
+
+### 特定于数据科学的代码迁移问题（以及如何解决这些问题）
 
 > - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
-  ```
+- 对于嵌套参数的支持[已被删除](https://www.python.org/dev/peps/pep-3113/)
+  ```
   map(lambda x, (y, z): x, z, dict.items())
   ```
 
 >  However, it is still perfectly working with different comprehensions:
+
+但是，它仍然完全适用于不同的（列表）解析：
   ```python
   {x:z for x, (y, z) in d.items()}
   ```
 >  In general, comprehensions are also better 'translatable' between Python 2 and 3.
 
+一般来说，Python 2和Python 3之间的解析也是有着更好的“可翻译性”。
+
 > - `map()`, `.keys()`, `.values()`, `.items()`, etc. return iterators, not lists. Main problems with iterators are:
    - no trivial slicing
    - can't be iterated twice
 
+- `map()`， `.keys()`， `.values()`， `.items()`等等返回的是迭代器（iterators），而不是列表（lists）。迭代器的主要问题如下：
+   - 没有细小的切片
+   - 不能迭代两次
+
 >  Almost all of the problems are resolved by converting result to list.
 
-> - see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble
+将结果转换为列表几乎可以解决所有问题。
 
-### Main problems for teaching machine learning and data science with python
+> - see [Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/) when in trouble.
+
+- 当你遇到问题时请参见[Python FAQ: How do I port to Python 3?](https://eev.ee/blog/2016/07/31/python-faq-how-do-i-port-to-python-3/)。
+
+### 使用python教授机器学习和数据科学的主要问题
 
 > Course authors should spend time in the first lectures to explain what is an iterator,
 why it can't be sliced / concatenated / multiplied / iterated twice like a string (and how to deal with it).
 
+课程讲解者应该花时间在第一讲中解释什么是迭代器，
+为什么它不能像字符串一样被分割/连接/相乘/重复两次（以及如何处理它）。
+
 > I think most course authors would be happy to avoid these details, but now it is hardly possible.
+
+我认为大多数课程讲解者曾经都乐于避开这些细节，但现在几乎不可能（再避开了）。
 
 # 结论
 
