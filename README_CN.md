@@ -705,10 +705,10 @@ isinstance(x, int)              # Python 3, easier to remember
 - Python 3 has [stable ABI](https://www.python.org/dev/peps/pep-0384/)
 - Python 3 supports unicode identifies (so `ω = Δφ / Δt` is ok), but you'd [better use good old ASCII names](https://stackoverflow.com/a/29855176/498892)
 - some libraries e.g. [jupyterhub](https://github.com/jupyterhub/jupyterhub) (jupyter in cloud), django and fresh ipython only support Python 3, so features that sound useless for you are useful for libraries you'll probably want to use once.
-
+----------
 - `Enum`（枚举类）理论上是有用的，但是
-   - string-typing 已经在Python数据栈中被广泛采用
-   - `Enum`似乎不会与numpy和pandas的分类相互作用
+    - string-typing 已经在Python数据栈中被广泛采用
+    - `Enum`似乎不会与numpy和pandas的分类相互作用
 - 协程（coroutines）*听起来*也非常适用于数据管道（参见David Beazley的[幻灯片](http://www.dabeaz.com/coroutines/Coroutines.pdf)），但是我从来没见过代码引用它们。
 - Python 3 有着[稳定的ABI](https://www.python.org/dev/peps/pep-0384/)
 
@@ -719,10 +719,10 @@ isinstance(x, int)              # Python 3, easier to remember
 ### 特定于数据科学的代码迁移问题（以及如何解决这些问题）
 
 > - support for nested arguments [was dropped](https://www.python.org/dev/peps/pep-3113/)
-- 对于嵌套参数的支持[已被删除](https://www.python.org/dev/peps/pep-3113/)
-  ```
+- 对于嵌套参数的支持[已被删除](https://www.python.org/dev/peps/pep-3113/)。
+```
   map(lambda x, (y, z): x, z, dict.items())
-  ```
+```
 
 >  However, it is still perfectly working with different comprehensions:
 
