@@ -423,7 +423,7 @@ if a: # WRONG check for None
 
 ## 用于NLP的Unicode 
 
-*译者注：NLP，神经语言程序学 (Neuro-Linguistic Programming) *
+*译者注：NLP，自然语言处理 (Natural Language Processing) *
 
 ```python
 s = '您好'
