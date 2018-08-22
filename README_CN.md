@@ -290,7 +290,7 @@ found_images = pathlib.Path('/path/').glob('**/*.jpg')
 
     这*并不是*推荐的方法，现在却可能是一次小小的黑客攻击。
 > - `print` can participate in list comprehensions and other language constructs
-- `print` 可以参与理解列表和其他语言结构:
+- `print` 可以参与列表推导式和其他语言结构:
 
     ```python
     # Python 3
