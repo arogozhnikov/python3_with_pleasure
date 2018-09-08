@@ -133,7 +133,7 @@ For instance, measurement units are a common pain in scientific areas, `astropy`
 # Python 3
 from astropy import units as u
 @u.quantity_input()
-def frequency(speed: u.meter / u.s, wavelength: u.m) -> u.terahertz:
+def frequency(speed: u.meter / u.s, wavelength: u.nm) -> u.terahertz:
     return speed / wavelength
 
 frequency(speed=300_000 * u.km / u.s, wavelength=555 * u.nm)
