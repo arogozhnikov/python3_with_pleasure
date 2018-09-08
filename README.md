@@ -167,12 +167,12 @@ Recursive folder globbing is not easy in Python 2, even though the [glob2](https
 import glob
 
 # Python 2
-found_images = \
-    glob.glob('/path/*.jpg') \
-  + glob.glob('/path/*/*.jpg') \
-  + glob.glob('/path/*/*/*.jpg') \
-  + glob.glob('/path/*/*/*/*.jpg') \
-  + glob.glob('/path/*/*/*/*/*.jpg')
+found_images = (
+    glob.glob('/path/*.jpg')
+  + glob.glob('/path/*/*.jpg')
+  + glob.glob('/path/*/*/*.jpg')
+  + glob.glob('/path/*/*/*/*.jpg')
+  + glob.glob('/path/*/*/*/*/*.jpg'))
 
 # Python 3
 found_images = glob.glob('/path/**/*.jpg', recursive=True)
