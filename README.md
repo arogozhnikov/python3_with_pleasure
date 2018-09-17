@@ -123,7 +123,9 @@ any2([False, None, "", 0]) # fails
 
 ```
 
-## Other usages of function annotations
+## <strike>Other usages of function annotations</strike>
+
+*Update: starting from python 3.7 this behavior was [depreciated](https://www.python.org/dev/peps/pep-0563/#non-typing-usage-of-annotations), and function annotations should be used for type hinting only.*
 
 As mentioned before, annotations do not influence code execution, but rather provide some meta-information,
 and you can use it as you wish.
