@@ -547,6 +547,32 @@ class SVC(BaseSVC):
 - users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
 - this mechanism provides a great combination of reliability and flexibility of APIs
 
+## Customization of access to module attributes
+
+In Python you can override attribute resolution with `__getattr__` and `__dir__` for any object. Since python 3.7 you can do it for modules too.
+
+A good example is implementing a `random` submodule of tensor libraries, which is typically a shortcut to skip initialization and passing of RandomState objects. Here's an example for numpy:  
+```
+import numpy
+__random_state = numpy.random.RandomState()
+
+def __getattr__(name):
+    return getattr(__random_state, name)
+
+def __dir__():
+    return dir(__random_state)
+    
+def seed(seed):
+    __random_state = numpy.random.RandomState(seed=seed)
+```
+
+You can compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/master/cupy/random/distributions.py).
+
+Additionally, now you can
+- use it for lazy loading of submodules
+- use this for [deprecations in API](https://www.python.org/dev/peps/pep-0562/)
+- introduce runtime routing between submodules
+
 
 ## Minor: constants in `math` module
 
