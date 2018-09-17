@@ -6,7 +6,7 @@ it boasts various deep learning frameworks and well-established set of tools for
 
 However, Python ecosystem co-exists in Python 2 and Python 3, and Python 2 is still used among data scientists.
 By the end of 2019 the scientific stack will [stop supporting Python2](http://www.python3statement.org).
-As for numpy, after 2018 any new feature releases will only support [Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst).
+As for numpy, after 2018 any new feature releases will only support [Python3](https://github.com/numpy/numpy/blob/master/doc/neps/dropping-python2.7-proposal.rst). *Update (Sep 2018): same story now with pandas, matplotlib, ipython, jupyter notebook and jupyter lab.*
 
 To make the transition less frustrating, I've collected a bunch of Python 3 features that you may find useful.
 
