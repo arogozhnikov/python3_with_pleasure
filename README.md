@@ -125,7 +125,7 @@ any2([False, None, "", 0]) # fails
 
 ## <strike>Other usages of function annotations</strike>
 
-*Update: starting from python 3.7 this behavior was [depreciated](https://www.python.org/dev/peps/pep-0563/#non-typing-usage-of-annotations), and function annotations should be used for type hinting only.*
+*Update: starting from python 3.7 this behavior was [depreciated](https://www.python.org/dev/peps/pep-0563/#non-typing-usage-of-annotations), and function annotations should be used for type hinting only. Python 4 will not support other usages of annotations.*
 
 As mentioned before, annotations do not influence code execution, but rather provide some meta-information,
 and you can use it as you wish.
@@ -561,13 +561,12 @@ class Coder(Person):
     preferred_language: str = 'Python 3'
 ```
 
-Dataclass decorator takes the job of implementing routine methods for you (initialization, representation, comparison, and hashing when applicable). 
+`dataclass` decorator takes the job of implementing routine methods for you (initialization, representation, comparison, and hashing when applicable). 
 Let's name some features:
 - data classes can be both mutable and immutable
 - default values for fields are supported
 - inheritance
 - data classes are still old good classes: you can define new methods and override existing
-- constructing using order or kwargs
 - post-init processing (e.g. to verify consistency) 
 
 Geir Arne Hjelle gives a good overview of dataclasses [in his post](https://realpython.com/python-data-classes/).
@@ -579,8 +578,9 @@ Geir Arne Hjelle gives a good overview of dataclasses [in his post](https://real
 
 In Python you can control attribute access and hinting with `__getattr__` and `__dir__` for any object. Since python 3.7 you can do it for modules too.
 
-A good example is implementing a `random` submodule of tensor libraries, which is typically a shortcut to skip initialization and passing of RandomState objects. Here's implementation for numpy:  
+A natural example is implementing a `random` submodule of tensor libraries, which is typically a shortcut to skip initialization and passing of RandomState objects. Here's implementation for numpy:  
 ```python
+# nprandom.py
 import numpy
 __random_state = numpy.random.RandomState()
 
@@ -594,7 +594,7 @@ def seed(seed):
     __random_state = numpy.random.RandomState(seed=seed)
 ```
 
-Compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/94592ecac8152d5f4a56a129325cc91d184480ad/cupy/random/distributions.py).
+One can also mix this way functionalities of different objects/submodules. Compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/94592ecac8152d5f4a56a129325cc91d184480ad/cupy/random/distributions.py).
 
 Additionally, now one can
 - use it for lazy loading of submodules
@@ -701,4 +701,4 @@ Following migrations are promised to be smoother: ["we will never do this kind o
 
 ### License
 
-This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
+This text was published by [Alex Rogozhnikov](https://arogozhnikov.github.io/about/) and [contributors](https://github.com/arogozhnikov/python3_with_pleasure/graphs/contributors) under [CC BY-SA 3.0 License](https://creativecommons.org/licenses/by-sa/3.0/) (excluding images).
