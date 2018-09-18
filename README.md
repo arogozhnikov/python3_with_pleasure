@@ -547,12 +547,40 @@ class SVC(BaseSVC):
 - users have to specify names of parameters `sklearn.svm.SVC(C=2, kernel='poly', degree=2, gamma=4, coef0=0.5)` now
 - this mechanism provides a great combination of reliability and flexibility of APIs
 
+## Data classes
+
+Python 3.7 introduces data classes, a good replacement for `namedtuple` in most cases.
+```python
+@dataclass
+class Person:
+	name: str
+	age: int
+
+@dataclass
+class Coder(Person):
+	preferred_language: str = 'Python 3'
+```
+
+Dataclass decorator takes the job of implementing routine methods for you (initialization, representation, comparison, and hashing when applicable). 
+Let's name some features:
+- data classes can be both mutable and immutable
+- default values for fields are supported
+- inheritance
+- data classes are still old good classes: you can define new methods and override existing
+- constructing using order or kwargs
+- post-init processing (e.g. to verify consistency) 
+
+Geir Arne Hjelle gives a good overview of dataclasses [in his post](https://realpython.com/python-data-classes/).
+
+
+
+
 ## Customizing access to module attributes
 
 In Python you can control attribute access and hinting with `__getattr__` and `__dir__` for any object. Since python 3.7 you can do it for modules too.
 
 A good example is implementing a `random` submodule of tensor libraries, which is typically a shortcut to skip initialization and passing of RandomState objects. Here's implementation for numpy:  
-```
+```python
 import numpy
 __random_state = numpy.random.RandomState()
 
@@ -566,12 +594,24 @@ def seed(seed):
     __random_state = numpy.random.RandomState(seed=seed)
 ```
 
-Compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/master/cupy/random/distributions.py).
+Compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/94592ecac8152d5f4a56a129325cc91d184480ad/cupy/random/distributions.py).
 
 Additionally, now one can
 - use it for lazy loading of submodules
 - use this for [deprecations in API](https://www.python.org/dev/peps/pep-0562/)
 - introduce runtime routing between submodules
+
+## Built-in breakpoint()
+
+Just write `breakpoint()` in the code to invoke debugger.
+```python
+# Python 3.7+, not all IDEs support this at the moment
+foo()
+breakpoint()
+bar()
+```
+
+For remote debugging you may want to try [combining breakpoint() with `web-pdb`](https://hackernoon.com/python-3-7s-new-builtin-breakpoint-a-quick-tour-4f1aebc444c)
 
 
 ## Minor: constants in `math` module
