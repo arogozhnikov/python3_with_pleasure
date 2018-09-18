@@ -553,12 +553,12 @@ Python 3.7 introduces data classes, a good replacement for `namedtuple` in most 
 ```python
 @dataclass
 class Person:
-	name: str
-	age: int
+    name: str
+    age: int
 
 @dataclass
 class Coder(Person):
-	preferred_language: str = 'Python 3'
+    preferred_language: str = 'Python 3'
 ```
 
 Dataclass decorator takes the job of implementing routine methods for you (initialization, representation, comparison, and hashing when applicable). 
