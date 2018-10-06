@@ -597,7 +597,7 @@ def seed(seed):
 One can also mix this way functionalities of different objects/submodules. Compare with tricks in [pytorch](https://github.com/pytorch/pytorch/blob/3ce17bf8f6a2c4239085191ea60d6ee51cd620a5/torch/__init__.py#L253-L256) and [cupy](https://github.com/cupy/cupy/blob/94592ecac8152d5f4a56a129325cc91d184480ad/cupy/random/distributions.py).
 
 Additionally, now one can
-- use it for lazy loading of submodules. Example: `import tensorflow` takes **~150MB** of RAM because of importing of all submodules (and dependencies). Now imagine you spawn subprocesses each importing tensorflow... Do you need everything imported?  
+- use it for [lazy loading of submodules](https://snarky.ca/lazy-importing-in-python-3-7/). For example, `import tensorflow` takes **~150MB** of RAM is imports all submodules (and dependencies). 
 - use this for [deprecations in API](https://www.python.org/dev/peps/pep-0562/)
 - introduce runtime routing between submodules
 
