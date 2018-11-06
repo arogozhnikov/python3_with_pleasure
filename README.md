@@ -521,7 +521,7 @@ The same approach also works for lists, tuples, and sets (`a`, `b`, `c` are any 
 {*a, *b, *c} # set, union
 ```
 
-Functions also [support this](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
+Functions also [support multiple unpacking](https://docs.python.org/3/whatsnew/3.5.html#whatsnew-pep-448) for `*args` and `**kwargs`:
 ```python
 # Python 3.5+
 do_something(**{**default_settings, **custom_settings})
