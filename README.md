@@ -641,6 +641,9 @@ isinstance(x, (long, int))      # Python 2
 isinstance(x, int)              # Python 3, easier to remember
 ```
 
+Update: first check also works for *other integral types*, such as `numpy.int32`, `numpy.int64`, but others don't. So they're not equivalent.
+
+
 ## Other stuff
 
 - `Enum`s are theoretically useful, but
