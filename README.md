@@ -1,7 +1,11 @@
+# We made it! 
+
+*Update (Jan 2020)*. 
+Python 2 is now officially retired. Thanks to everyone for making this hard transition to better code happen!
+
 # Migrating to Python 3 with pleasure
 ## A short guide on features of Python 3 for data scientists
 
-*Update (Jan 2020)*. Python 2 is officially retired. Thanks to everyone for making this hard transition to better code happen!
 
 Python became a mainstream language for machine learning and other scientific fields that heavily operate with data;
 it boasts various deep learning frameworks and well-established set of tools for data processing and visualization.
