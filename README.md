@@ -1,4 +1,4 @@
-# We made it! 
+# We made it! a greatful fantastic project
 
 *Update (Jan 2020)*. 
 Python 2 is now officially retired. Thanks to everyone for making this hard transition to better code happen!
